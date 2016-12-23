@@ -1,0 +1,8 @@
+<div class="col-lg-6">
+  <div class="nested-fields">
+    <%= f.fields_for :secret_santa_participant_exceptions do |secret_santa_participant_exception| %>
+      <%= render 'secret_santa_participant_exceptions/secret_santa_participant_exception_fields', f: secret_santa_participant_exception %>
+    <% end %>
+    <%= link_to_add_association "Add Exception for #{f.object.name}", f, :secret_santa_participant_exceptions, partial: 'secret_santa_participant_exceptions/secret_santa_participant_exception_fields' %>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<%= render 'errors', object: secret_santa if secret_santa.errors.any? %>
+
+<%= simple_form_for secret_santa do |f| %>
+  <h1>New Secret Santa</h1>
+  <%= hidden_field_tag :step, @step %>
+  <h2>Who's joining you?</h2>
+  <details>
+    <summary>Why do I show up?</summary>
+    <p>We are assuming that you are a participant too!</p>
+    <p>If this is incorrect, feel free to delete yourself below.</p>
+  </details>
+  
+  <div id="secret_santa_participants">
+    <%= f.fields_for :secret_santa_participants do |secret_santa_participant| %>
+      <%= render 'secret_santa_participants/secret_santa_participant_fields', f: secret_santa_participant %>
+    <% end %>
+    <%= link_to_add_association 'Add Participant', f, :secret_santa_participants, partial: 'secret_santa_participants/secret_santa_participant_fields' %>
+  </div>
+
+  <%= f.submit 'Next', class: 'btn btn-success' %>
+<% end %>

@@ -1,0 +1,37 @@
+<%= render 'errors', object: secret_santa if secret_santa.errors.any? %>
+
+<%= simple_form_for secret_santa do |f| %>
+  <h1>New Secret Santa</h1>
+  <%= hidden_field_tag :step, @step %>
+  <h2>How would you like to tell everyone?</h2>
+
+  <div id="secret_santa_notifications" class="row">
+    <div class="col-lg-5">
+      <h3 class="text-center"><%= f.input :send_email, label: 'I want an Email!' %></h3>
+      <%= f.input :email_subject, autofocus: true %>
+      <%= f.label 'Email content', for: :email_content %>
+      <%= f.trix_editor :email_content %>
+    </div>
+    <div class="col-lg-2">
+      <h3 class="text-center">and/or</h3>
+      <br>
+      <h4 class="text-center">Tips for your email/file:</h4>
+      <dl>
+        <dt>{{Giver}}</dt>
+        <dd>- The name of the person giving the gift.</dd>
+        <dt>{{Receiver}}</dt>
+        <dd>- The name of the person the giver will be giving to.</dd>
+        <dt>{{SecretSanta}}</dt>
+        <dd>- The name of the current Secret Santa you are creating.</dd>
+      </dl>
+    </div>
+    <div class="col-lg-5">
+      <h3 class="text-center"><%= f.input :send_file, label: 'I want a File!' %></h3>
+      <%= f.input :filename %>
+      <%= f.label 'File content', for: :file_content %>
+      <%= f.trix_editor :email_content %>
+    </div>
+  </div>
+
+  <%= f.submit 'Finish', class: 'btn btn-success' %>
+<% end %>

@@ -1,0 +1,14 @@
+<%= render 'errors', object: secret_santa if secret_santa.errors.any? %>
+
+<%= simple_form_for secret_santa do |f| %>
+  <h1>New Secret Santa</h1>
+  <%= hidden_field_tag :step, @step %>
+  <h2>Who are you?</h2>
+  <div id="secret_santa_user">
+    <%= f.simple_fields_for :user do |user| %>
+      <%= render 'users/user_fields', f: user %>
+    <% end %>
+  </div>
+
+  <%= f.submit 'Next', class: 'btn btn-success' %>
+<% end %>

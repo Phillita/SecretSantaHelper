@@ -1,3 +1,19 @@
 <% page_title('Home') %>
 
-<h1>Welcome  <%= "back, #{current_user.name}" if current_user %></h1>
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <h1>Welcome  <%= "back, #{current_user.name}" if current_user %></h1>
+    <br>
+    <h2>What would you like to do?</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-6">
+    <%= link_to 'Start a Secret Santa', new_secret_santum_path %>
+  </div>
+  <div class="col-lg-6">
+
+  </div>
+</div>

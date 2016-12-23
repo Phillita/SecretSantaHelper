@@ -11,7 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150727011707) do
+ActiveRecord::Schema.define(version: 20161208013621) do
+
+  create_table "participants", force: :cascade do |t|
+    t.string   "participantable_type", limit: 255
+    t.integer  "participantable_id",   limit: 4
+    t.integer  "user_id",              limit: 4
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
+
+  create_table "secret_santa_participant_exceptions", force: :cascade do |t|
+    t.integer  "user_id",                     limit: 4
+    t.integer  "secret_santa_participant_id", limit: 4
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  create_table "secret_santas", force: :cascade do |t|
+    t.integer  "user_id",       limit: 4
+    t.string   "name",          limit: 255
+    t.boolean  "send_file",                   default: false
+    t.string   "filename",      limit: 255
+    t.text     "file_content",  limit: 65535
+    t.boolean  "send_email",                  default: true
+    t.text     "email_content", limit: 65535
+    t.string   "email_subject", limit: 255
+    t.datetime "test_run"
+    t.datetime "last_run_on"
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -35,6 +65,7 @@ ActiveRecord::Schema.define(version: 20150727011707) do
     t.integer  "failed_attempts",        limit: 4,   default: 0,  null: false
     t.string   "unlock_token",           limit: 255
     t.datetime "locked_at"
+    t.datetime "guest"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

@@ -39,9 +39,18 @@ gem 'devise'
 
 gem 'cancancan', '~> 1.10'
 gem 'simple_form'
+gem 'cocoon', '~> 1.2', '>= 1.2.9'
+gem 'jquery-turbolinks', '~> 2.1'
+gem 'trix', '~> 0.9.10'
 
 group :development do
   gem 'letter_opener'
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
+end
+
+group :test do
+  gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
 end
 
 group :development, :test do
@@ -51,11 +60,8 @@ group :development, :test do
 
   gem 'rspec-rails'
   gem 'factory_girl'
-
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'better_errors', '~> 2.1', '>= 2.1.1'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-
 end
