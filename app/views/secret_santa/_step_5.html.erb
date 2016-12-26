@@ -1,7 +1,10 @@
 <%= render 'errors', object: secret_santa if secret_santa.errors.any? %>
 
+
 <%= simple_form_for secret_santa do |f| %>
-  <h1>New Secret Santa</h1>
+  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa' %></h1>
+  <hr>
+  <%= render 'shared/progress_bar', max_step: 5, step: 5, pre_title: 'Setup Step' %>
   <%= hidden_field_tag :step, @step %>
   <h2>How would you like to tell everyone?</h2>
 
@@ -34,4 +37,5 @@
   </div>
 
   <%= f.submit 'Finish', class: 'btn btn-success' %>
+  <%= f.submit 'Back', class: 'btn btn-primary', style: 'float:left;' %>
 <% end %>

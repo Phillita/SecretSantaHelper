@@ -36,7 +36,18 @@ class SecretSantaController < ApplicationController
     end
   end
 
+  def edit
+    @secret_santa = SecretSanta.find(params[:id])
+    wizard(@secret_santa)
+
+    respond_to do |format|
+      format.html { render :new }
+      format.json { render json: @resource }
+    end
+  end
+
   def show
+    @secret_santa = SecretSanta.find(params[:id])
     respond_to do |format|
       format.html
       format.json { render json: @resource }
@@ -48,17 +59,22 @@ class SecretSantaController < ApplicationController
   def wizard(secret_santa)
     @step = wizard_step
     errors = secret_santa.errors.any?
+    @step += 1 unless back? || errors.present?
+    @step -= 1 if back?
     case @step
-    when 1
-      secret_santa.build_user(guest: Time.zone.now)
     when 2
-      secret_santa.secret_santa_participants.build(user_id: secret_santa.user_id)
+      secret_santa.build_user(guest: Time.zone.now) unless secret_santa.user
+    when 3
+      secret_santa.secret_santa_participants.where(user_id: secret_santa.user_id).first_or_initialize
     end unless errors
-    @step += 1 unless errors
   end
 
   def wizard_step
     params[:step].try(:to_i) || 0
+  end
+
+  def back?
+    params[:commit] == 'Back'
   end
 
   def secret_santa_params
@@ -72,7 +88,7 @@ class SecretSantaController < ApplicationController
       secret_santa_participants_attributes: [:id,
                                              :_destroy,
                                              user_attributes: [:first_name, :last_name, :email, :guest],
-                                             secret_santa_participant_exceptions_attributes: [:user_id, :_destroy]]
+                                             secret_santa_participant_exceptions_attributes: [:id, :user_id, :_destroy]]
     )
   end
 end

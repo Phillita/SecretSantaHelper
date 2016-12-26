@@ -1,7 +1,9 @@
 <%= render 'errors', object: secret_santa if secret_santa.errors.any? %>
 
-<%= simple_form_for secret_santa, url: secret_santa_path do |f| %>
-  <h1>New Secret Santa</h1>
+<%= simple_form_for secret_santa, url: secret_santa.persisted? ? secret_santum_path(secret_santa) : secret_santa_path do |f| %>
+  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa' %></h1>
+  <hr>
+  <%= render 'shared/progress_bar', max_step: 5, step: 1, pre_title: 'Setup Step' %>
   <%= hidden_field_tag :step, @step %>
   <h2>What would you like to name/call it?</h2>
   <div id="secret_santa_name">

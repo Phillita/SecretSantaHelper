@@ -1,0 +1,6 @@
+<div class="row">
+  <div class="col-lg-12">
+    <small>Progress:</small>
+    <%= content_tag :progress, content_tag(:strong, "#{pre_title} #{step}/#{max_step}"), style: "width:100%;", max: 100, title: "#{pre_title} #{step}/#{max_step}", value: (100 / max_step) * step %>
+  </div>
+</div>
