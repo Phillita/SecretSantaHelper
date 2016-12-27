@@ -13,16 +13,24 @@
   </div>
 </div>
 
+<%= content_tag :div, class: 'row' do %>
+  <div class="col-lg-12">
+    <div class="alert alert-warning secret-santa-ready">
+      <p>Not all participants in this secret santa can be matched with another person. Please make sure the setting are updated in order to run the nmatching process.</p>
+    </div>
+  </div>
+<% end unless @secret_santa.ready? %>
+
 <div class="row">
   <div class="col-lg-12">
     <h2>Here's who's in:</h2>
   </div>
 </div>
 
-<div class="row">
+<div class="row secret-santa-participants">
   <% @secret_santa.secret_santa_participants.each do |participant| %>
-    <div class="col-lg-6 well well-compact">
-      <div class="participant">
+    <div class="col-lg-6">
+      <div class="participant well well-compact">
         <div class="name">
           <%= content_tag :p, participant.name %>
         </div>

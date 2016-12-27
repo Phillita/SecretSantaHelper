@@ -42,6 +42,7 @@ gem 'simple_form'
 gem 'cocoon', '~> 1.2', '>= 1.2.9'
 gem 'jquery-turbolinks', '~> 2.1'
 gem 'trix', '~> 0.9.10'
+gem 'arel-helpers', '~> 2.3'
 
 group :development do
   gem 'letter_opener'

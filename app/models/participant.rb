@@ -1,4 +1,6 @@
 class Participant < ActiveRecord::Base
+  include ArelHelpers::ArelTable
+
   belongs_to :participantable, polymorphic: true
   belongs_to :user, autosave: true
 
