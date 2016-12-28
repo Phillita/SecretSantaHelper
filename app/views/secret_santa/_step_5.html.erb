@@ -2,11 +2,28 @@
 
 
 <%= simple_form_for secret_santa do |f| %>
-  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa' %></h1>
+  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
   <hr>
   <%= render 'shared/progress_bar', max_step: 5, step: 5, pre_title: 'Setup Step' %>
+  <%= render 'step_progress_breadcrumbs', secret_santa: secret_santa, step: 5 %>
   <%= hidden_field_tag :step, @step %>
   <h2>How would you like to tell everyone?</h2>
+  <details>
+    <summary>Why do I need this?</summary>
+    <p>In order to get the info to everyone, you need to provide us with a way.</p>
+    <p>It's also an easy way for us to make sure that it's a suprise for you!</p>
+    <dl>
+      <dt>Email</dt>
+      <dd>- We will send the person who they are buying for in the sent email.</dd>
+      <dt>File</dt>
+      <dd>- The file will be named for the individual who should get the file. Their Secret Santa will be inside.</dd>
+      <dt>Both</dt>
+      <dd>- We'll send a file with the email.</dd>
+      <dt>None</dt>
+      <dd>- Test mode will diplay the results on the page when you click 'Begin Matching'.</dd>
+    </dl>
+  </details>
+  <hr>
 
   <div id="secret_santa_notifications" class="row">
     <div class="col-lg-5">

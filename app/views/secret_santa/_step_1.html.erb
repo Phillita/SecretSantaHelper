@@ -1,11 +1,18 @@
 <%= render 'errors', object: secret_santa if secret_santa.errors.any? %>
 
 <%= simple_form_for secret_santa, url: secret_santa.persisted? ? secret_santum_path(secret_santa) : secret_santa_path do |f| %>
-  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa' %></h1>
+  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
   <hr>
   <%= render 'shared/progress_bar', max_step: 5, step: 1, pre_title: 'Setup Step' %>
+  <%= render 'step_progress_breadcrumbs', secret_santa: secret_santa, step: 1 %>
   <%= hidden_field_tag :step, @step %>
   <h2>What would you like to name/call it?</h2>
+  <details>
+    <summary>What's this used for?</summary>
+    <p>This will be your reference back to this Secret Santa.</p>
+    <p>You can also use this title later on in the setup process for emails/text files.</p>
+  </details>
+  <hr>
   <div id="secret_santa_name">
     <%= f.input :name, autofocus: true %>
     <%= hidden_field_tag :step, @step %>

@@ -1,9 +1,10 @@
 <%= render 'errors', object: secret_santa if secret_santa.errors.any? %>
 
 <%= simple_form_for secret_santa do |f| %>
-  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa' %></h1>
+  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
   <hr>
   <%= render 'shared/progress_bar', max_step: 5, step: 4, pre_title: 'Setup Step' %>
+  <%= render 'step_progress_breadcrumbs', secret_santa: secret_santa, step: 4 %>
   <%= hidden_field_tag :step, @step %>
   <h2>Who doesn't want to buy for who?</h2>
   <details>
@@ -11,11 +12,15 @@
     <p>There may be a reason someone does not want/need to buy for another.</p>
     <p>Set some exceptions for the participants so they don't get matched up!</p>
   </details>
+  <hr>
 
-  <div id="secret_santa_participant_exceptions" class="row well well-compact">
-    <%= f.fields_for :secret_santa_participants do |secret_santa_participant| %>
-      <%= render 'secret_santa_participants/exception_fields', f: secret_santa_participant %>
-    <% end %>
+  <div id="secret_santa_participant_exceptions" class="row">
+    <div class="col-lg-8 well">
+      <%= f.fields_for :secret_santa_participants do |secret_santa_participant| %>
+        <%= render 'secret_santa_participants/exception_fields', f: secret_santa_participant %>
+        <br>
+      <% end %>
+    </div>
   </div>
 
   <%= f.submit 'Next', class: 'btn btn-success' %>

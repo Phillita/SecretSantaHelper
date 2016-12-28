@@ -1,11 +1,13 @@
 <%= render 'errors', object: secret_santa if secret_santa.errors.any? %>
 
 <%= simple_form_for secret_santa do |f| %>
-  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa' %></h1>
+  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
   <hr>
   <%= render 'shared/progress_bar', max_step: 5, step: 2, pre_title: 'Setup Step' %>
+  <%= render 'step_progress_breadcrumbs', secret_santa: secret_santa, step: 2 %>
   <%= hidden_field_tag :step, @step %>
   <h2>Who are you?</h2>
+  <hr>
   <div id="secret_santa_user">
     <%= f.simple_fields_for :user do |user| %>
       <%= render 'users/user_fields', f: user %>

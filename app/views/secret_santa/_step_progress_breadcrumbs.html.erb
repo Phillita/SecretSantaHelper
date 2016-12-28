@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="secret-santa-setup-breadcrumbs text-center">
+      <%= link_to_if step != 1, 'Name it!', edit_secret_santum_path(secret_santa, step: 0) %> <strong>&nbsp;|&nbsp;</strong>
+      <%= link_to_if step != 2, 'Who Are You?', edit_secret_santum_path(secret_santa, step: 1) %> <strong>&nbsp;|&nbsp;</strong>
+      <%= link_to_if step != 3, 'Who\'s In?', edit_secret_santum_path(secret_santa, step: 2) %> <strong>&nbsp;|&nbsp;</strong>
+      <%= link_to_if step != 4, 'Any Exceptions?', edit_secret_santum_path(secret_santa, step: 3) %> <strong>&nbsp;|&nbsp;</strong>
+      <%= link_to_if step != 5, 'How Do I Contact Them?', edit_secret_santum_path(secret_santa, step: 4) %>
+    </div>
+  </div>
+</div>
