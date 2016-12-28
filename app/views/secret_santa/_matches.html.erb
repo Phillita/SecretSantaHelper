@@ -1,0 +1,17 @@
+<h3>Match Results:</h3>
+
+<%= content_tag :div, class: 'row' do %>
+  <div class="col-lg-12">
+    <div class="alert alert-warning">
+      <p>Note that this is a test and that nothing has been sent to the participants.</p>
+    </div>
+  </div>
+<% end if santa_service.secret_santa.test? %>
+
+<% santa_service.matches.each do |id, values| %>
+  <div class="row">
+    <div class="col-lg-12">
+      <p><strong><%= values[:name] %></strong> gives to <strong><%= values[:secret][:name] %></strong> and the match is a <i><%= !values[:exceptions].include?(values[:secret][:id]) ? 'success!' : 'failure.' %></i></p>
+    </div>
+  </div>
+<% end %>

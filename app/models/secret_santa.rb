@@ -24,11 +24,19 @@ class SecretSanta < ActiveRecord::Base
 
   # either the user said this is a test or has selected to not have a file or email sent
   def test?
-    test.present? || (!send_email? && !send_file?)
+    test_run.present? || (!send_email? && !send_file?)
   end
 
   def ready?
     secret_santa_participants.any? && participants_can_all_be_matched?
+  end
+
+  def to_h
+    {}.tap do |hsh|
+      secret_santa_participants.each do |participant|
+        hsh[participant.id] = participant.to_h
+      end
+    end
   end
 
   private
@@ -41,7 +49,7 @@ class SecretSanta < ActiveRecord::Base
         .where(
           SecretSantaParticipant[:id].not_eq(participant.id)
           .and(
-            SecretSantaParticipantException[:user_id].not_eq(participant.user_id)
+            SecretSantaParticipantException[:exception_id].not_eq(participant.id)
             .or(SecretSantaParticipantException[:id].eq(nil))
           )
         )

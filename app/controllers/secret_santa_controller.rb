@@ -54,6 +54,16 @@ class SecretSantaController < ApplicationController
     end
   end
 
+  def match
+    @secret_santa = SecretSanta.find(params[:id])
+    @santa_service = SecretSantaService.new(@secret_santa)
+    @santa_service.make_magic!
+    respond_to do |format|
+      format.html
+      format.json { render json: @resource }
+    end
+  end
+
   private
 
   def wizard(secret_santa)
@@ -80,15 +90,17 @@ class SecretSantaController < ApplicationController
   def secret_santa_params
     params.require(:secret_santa).permit(
       :name,
+      :send_email,
       :email_subject,
       :email_content,
       :send_file,
+      :filename,
       :file_content,
       user_attributes: [:first_name, :last_name, :email, :guest],
       secret_santa_participants_attributes: [:id,
                                              :_destroy,
                                              user_attributes: [:first_name, :last_name, :email, :guest],
-                                             secret_santa_participant_exceptions_attributes: [:id, :user_id, :_destroy]]
+                                             secret_santa_participant_exceptions_attributes: [:id, :exception_id, :_destroy]]
     )
   end
 end

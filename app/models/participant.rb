@@ -8,7 +8,7 @@ class Participant < ActiveRecord::Base
 
   accepts_nested_attributes_for :user, reject_if: :all_blank
 
-  delegate :name, to: :user
+  delegate :name, :email, to: :user
 
   def autosave_associated_records_for_user
     return if user.nil?

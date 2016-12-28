@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20161208013621) do
   end
 
   create_table "secret_santa_participant_exceptions", force: :cascade do |t|
-    t.integer  "user_id",                     limit: 4
+    t.integer  "exception_id",                limit: 4
     t.integer  "secret_santa_participant_id", limit: 4
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false

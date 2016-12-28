@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   devise_for :users
   root to: 'home#index'
 
-  resources :secret_santa, path: 'secret_santa'
+  resources :secret_santa, path: 'secret_santa' do
+    member do
+      post 'match'
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

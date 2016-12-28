@@ -1,60 +1,51 @@
-module SecretSanta
-  def make_magic(test = false)
-    names = {
-      brady: { partner: :ryan, email: 'brady_a_p@hotmail.com' },
-      ryan: { partner: :brady, email: 'rpf770@mun.ca' },
-      luke: { partner: :none, email: 'stingluke4@hotmail.com' },
-      greg: { partner: :none, email: 'Stinggreg12@icloud.com' },
-      lauren: { partner: :mike, email: 'lauren_fraser98@hotmail.com' },
-      mike: { partner: :lauren, email: 'fitzyfour12@hotmail.com' },
-      jaylynn: { partner: :none, email: 'jaylynn.rossrogers@lkdsb.com' }
-    }
-    # names = {
-    #   chelsea: { partner: :none, email: 'chelsea@protech.ws' },
-    #   dania: { partner: :none, email: 'daniaphillips@gmail.com' },
-    #   tayler: { partner: :kara, email: 'taylerphillips20@gmail.com' },
-    #   kara: { partner: :tayler, email: 'kara_4291@hotmail.com' },
-    #   brady: { partner: :ryan, email: 'brady_a_p@hotmail.com' },
-    #   ryan: { partner: :brady, email: 'rpf770@mun.ca' }
-    # }
-    matches = find_matches(names)
-    if test
-      test_output_matches(matches)
-    else
-      print_matches(matches)
-      mail_matches(matches)
-      cleanup_files(matches)
+class SecretSantaService
+  attr_reader :secret_santa, :matches
+
+  def initialize(secret_santa)
+    @secret_santa = secret_santa
+  end
+
+  def make_magic!
+    @matches = find_matches(@secret_santa.to_h)
+    unless @secret_santa.test?
+      print_matches(@matches) if @secret_santa.send_file?
+      mail_matches(@matches) if @secret_santa.send_email?
+      cleanup_files(@matches) if @secret_santa.send_file?
     end
+    true
+  rescue => ex
+    Rails.logger.error ex.message
+    false
   end
 
   private
 
-  def find_matches(names)
+  def find_matches(santa_hsh)
     srand
     used = []
-    names_arr = names.keys
-    names_arr.shuffle.each do |name|
+    id_arr = santa_hsh.keys
+    id_arr.shuffle.each do |id|
       loop do
-        secret_match = names_arr[rand(names_arr.size)]
-        if names[secret_match][:secret].nil? &&
-           names[secret_match][:partner] != name &&
-           secret_match != name &&
-           !used.include?(name)
-          names[secret_match][:secret] = name
-          used << name
+        secret_id = id_arr[rand(id_arr.size)]
+        if santa_hsh[secret_id][:secret].nil? &&
+           !santa_hsh[secret_id][:exceptions].include?(id) &&
+           secret_id != id &&
+           !used.include?(id)
+          santa_hsh[secret_id][:secret] = { id: id, name: santa_hsh[id][:name] }
+          used << id
         end
-        break if names[secret_match][:secret] == name
+        break if santa_hsh[secret_id][:secret][:id] == id
       end
     end
-    names
+    santa_hsh
   end
 
-  def print_matches(names, dir = 'SecretSanta')
+  def print_matches(matches, dir = 'SecretSanta')
     require 'fileutils'
 
     FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-    names.each do |k, v|
+    matches.each do |k, v|
       filepath = "#{dir}/#{k.to_s.capitalize}.txt"
       File.open(filepath, 'w') do |file|
         file.write("Your Secret Santa is:\n")
@@ -68,7 +59,7 @@ module SecretSanta
     end
   end
 
-  def mail_matches(names)
+  def mail_matches(matches)
     require 'mail'
 
     options = {
@@ -84,9 +75,9 @@ module SecretSanta
       delivery_method :smtp, options
     end
 
-    names.each do |k, v|
+    matches.each do |k, v|
       next if v[:email].empty?
-      puts "Sending mail to: #{v[:email]}"
+      Rails.logger.info "Sending mail to: #{v[:email]}"
 
       mail = Mail.new
       mail.to v[:email]
@@ -99,13 +90,9 @@ module SecretSanta
     end
   end
 
-  def cleanup_files(names)
-    names.each do |_k, v|
+  def cleanup_files(matches)
+    matches.each do |_k, v|
       File.delete(v[:file])
     end
-  end
-
-  def test_output_matches(names)
-    names.each { |k, v| puts "#{k.to_s.capitalize} gives to #{v[:secret].to_s.capitalize} and the match is a #{v[:partner] != v[:secret] ? 'success!' : 'failure.'}" }
   end
 end
