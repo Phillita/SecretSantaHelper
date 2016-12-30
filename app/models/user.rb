@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   scope :guests, -> { where.not(guest: nil) }
 
   def name
-    "#{first_name} #{last_name}"
+    "#{first_name} #{last_name}".strip
   end
 
   def guest?

@@ -56,6 +56,7 @@ class SecretSantaController < ApplicationController
 
   def match
     @secret_santa = SecretSanta.find(params[:id])
+    @secret_santa.update_attributes(secret_santa_params)
     @santa_service = SecretSantaService.new(@secret_santa)
     @santa_service.make_magic!
     respond_to do |format|
@@ -96,6 +97,7 @@ class SecretSantaController < ApplicationController
       :send_file,
       :filename,
       :file_content,
+      :test_run,
       user_attributes: [:first_name, :last_name, :email, :guest],
       secret_santa_participants_attributes: [:id,
                                              :_destroy,

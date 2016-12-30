@@ -18,7 +18,11 @@
     <%= f.fields_for :secret_santa_participants do |secret_santa_participant| %>
       <%= render 'secret_santa_participants/secret_santa_participant_fields', f: secret_santa_participant %>
     <% end %>
-    <%= link_to_add_association 'Add Participant', f, :secret_santa_participants, partial: 'secret_santa_participants/secret_santa_participant_fields' %>
+    <%= link_to_add_association 'Add Participant',
+                                f,
+                                :secret_santa_participants,
+                                partial: 'secret_santa_participants/secret_santa_participant_fields',
+                                data: { association_insertion_method: :after } %>
   </div>
 
   <%= f.submit 'Next', class: 'btn btn-success' %>
