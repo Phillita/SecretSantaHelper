@@ -34,7 +34,7 @@ class SecretSantaService
           santa_hsh[secret_id][:secret] = { id: id, name: santa_hsh[id][:name] }
           used << id
         end
-        break if santa_hsh[secret_id][:secret][:id] == id
+        break if santa_hsh[secret_id].fetch(:secret, {}).fetch(:id, nil) == id
       end
     end
     santa_hsh

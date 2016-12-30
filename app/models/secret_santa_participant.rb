@@ -9,7 +9,7 @@ class SecretSantaParticipant < Participant
       hsh[:email] = email
       hsh[:exceptions] = [].tap do |arr|
         secret_santa_participant_exceptions.each do |exception|
-          arr << exception.user_id
+          arr << exception.exception_id
         end
       end
     end
