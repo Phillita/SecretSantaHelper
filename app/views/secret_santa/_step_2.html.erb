@@ -1,4 +1,4 @@
-<%= render 'errors', object: secret_santa if secret_santa.errors.any? %>
+<%= render 'errors', object: secret_santa if secret_santa.errors.any? && !@back %>
 
 <%= simple_form_for secret_santa do |f| %>
   <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>

@@ -13,7 +13,7 @@ class SecretSantaController < ApplicationController
 
   def update
     @secret_santa = SecretSanta.find(params[:id])
-    @secret_santa.update_attributes(secret_santa_params)
+    @secret_santa.update_attributes(secret_santa_params) if can_update?
     wizard(@secret_santa)
 
     respond_to do |format|
@@ -85,7 +85,11 @@ class SecretSantaController < ApplicationController
   end
 
   def back?
-    params[:commit] == 'Back'
+    @back ||= params[:commit] == 'Back'
+  end
+
+  def can_update?
+    params[:secret_santa]
   end
 
   def secret_santa_params
