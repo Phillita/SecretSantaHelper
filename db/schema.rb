@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161208013621) do
+ActiveRecord::Schema.define(version: 20170109013731) do
 
   create_table "participants", force: :cascade do |t|
     t.string   "participantable_type", limit: 255
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20161208013621) do
     t.string   "email_subject", limit: 255
     t.datetime "test_run"
     t.datetime "last_run_on"
+    t.string   "passphrase",    limit: 255
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
   end

@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :secret_santa, path: 'secret_santa' do
     member do
       patch 'match'
+      post 'unlock'
+      get 'access'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.

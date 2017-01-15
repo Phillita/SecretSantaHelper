@@ -1,0 +1,8 @@
+<div class="row">
+  <div class="col-lg-12">
+    <%= content_tag :div, class: "alert #{notification_class(notification_type)} fade in" do %>
+      <%= content_tag :button, 'x', class: 'close', data: { dismiss: 'alert' } %>
+      <%= notification %>
+    <% end %>
+  </div>
+</div>

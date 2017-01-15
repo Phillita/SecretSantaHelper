@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="alert alert-info">
+      <p>In order to access this Secret Santa, please verify by either logging in or entering the passcode.</p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-6">
+    <div class="well">
+      <h2>Enter Code</h2>
+      <%= form_tag unlock_secret_santum_path(@secret_santa) do |f| %>
+      <div class="form-group">
+        <%= label_tag :passphrase, 'Passphrase' %>
+        <%= text_field_tag :passphrase, '', class: 'form-control', autofocus: true %>
+      </div>
+      <%= submit_tag 'Unlock', class: 'btn btn-default' %>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="well">
+      <h2>Login</h2>
+    </div>
+  </div>
+</div>

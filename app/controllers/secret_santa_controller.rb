@@ -7,7 +7,6 @@ class SecretSantaController < ApplicationController
 
     respond_to do |format|
       format.html { render :new }
-      format.json { render json: @resource }
     end
   end
 
@@ -17,12 +16,13 @@ class SecretSantaController < ApplicationController
     wizard(@secret_santa)
 
     respond_to do |format|
-      if @step == 6
+      if current_user && @step == 6
+        format.html { redirect_to @secret_santa }
+      elsif @step == 7
         format.html { redirect_to @secret_santa }
       else
         format.html { render :new }
       end
-      format.json { render json: @resource }
     end
   end
 
@@ -32,7 +32,6 @@ class SecretSantaController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @resource }
     end
   end
 
@@ -42,15 +41,17 @@ class SecretSantaController < ApplicationController
 
     respond_to do |format|
       format.html { render :new }
-      format.json { render json: @resource }
     end
   end
 
   def show
     @secret_santa = SecretSanta.find(params[:id])
     respond_to do |format|
-      format.html
-      format.json { render json: @resource }
+      if can_access?(@secret_santa)
+        format.html
+      else
+        format.html { redirect_to access_secret_santum_path(@secret_santa) }
+      end
     end
   end
 
@@ -61,7 +62,31 @@ class SecretSantaController < ApplicationController
     @santa_service.make_magic!
     respond_to do |format|
       format.html
-      format.json { render json: @resource }
+    end
+  end
+
+  def unlock
+    @secret_santa = SecretSanta.find(params[:id])
+
+    if @secret_santa.passphrase == params[:passphrase]
+      session[:secret_santa] ||= []
+      session[:secret_santa] << params[:id]
+    end
+
+    respond_to do |format|
+      if can_access?(@secret_santa)
+        format.html { redirect_to @secret_santa }
+      else
+        flash.now[:error] = 'Incorrect passphrase.'
+        format.html { render :access }
+      end
+    end
+  end
+
+  def access
+    @secret_santa = SecretSanta.find(params[:id])
+    respond_to do |format|
+      format.html
     end
   end
 
@@ -88,6 +113,11 @@ class SecretSantaController < ApplicationController
     @back ||= params[:commit] == 'Back'
   end
 
+  def can_access?(secret_santa)
+    return true if secret_santa.passphrase.blank?
+    secret_santa.user == current_user || session.fetch(:secret_santa, []).include?(params[:id])
+  end
+
   def can_update?
     params[:secret_santa]
   end
@@ -102,6 +132,7 @@ class SecretSantaController < ApplicationController
       :filename,
       :file_content,
       :test_run,
+      :passphrase,
       user_attributes: [:first_name, :last_name, :email, :guest],
       secret_santa_participants_attributes: [:id,
                                              :_destroy,

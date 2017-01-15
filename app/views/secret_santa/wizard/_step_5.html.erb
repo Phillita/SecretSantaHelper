@@ -4,8 +4,8 @@
 <%= simple_form_for secret_santa do |f| %>
   <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
   <hr>
-  <%= render 'shared/progress_bar', max_step: 5, step: 5, pre_title: 'Setup Step' %>
-  <%= render 'step_progress_breadcrumbs', secret_santa: secret_santa, step: 5 %>
+  <%= render 'shared/progress_bar', max_step: max_secret_santa_step, step: 5, pre_title: 'Setup Step' %>
+  <%= render 'secret_santa/wizard/step_progress_breadcrumbs', secret_santa: secret_santa, step: 5 %>
   <%= hidden_field_tag :step, @step %>
   <h2>How would you like to tell everyone?</h2>
   <details>
@@ -53,6 +53,6 @@
     </div>
   </div>
 
-  <%= f.submit 'Finish', class: 'btn btn-success' %>
+  <%= f.submit current_user ? 'Finish' : 'Next', class: 'btn btn-success' %>
   <%= f.submit 'Back', class: 'btn btn-primary', style: 'float:left;' %>
 <% end %>
