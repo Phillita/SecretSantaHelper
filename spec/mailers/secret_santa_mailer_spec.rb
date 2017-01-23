@@ -26,7 +26,13 @@ RSpec.describe SecretSantaMailer, type: :mailer do
     end
 
     it 'should match the subject set by the secret santa object' do
-      expect(subject.subject).to eq(secret_santa_participant.participantable.email_subject)
+      template = Liquid::Template.parse(secret_santa_participant.participantable.email_subject)
+      expect(subject.subject).to match(
+        template.render(
+          'Giver' => secret_santa_participant.user.name,
+          'Receiver' => match_name,
+          'SecretSanta' => secret_santa_participant.participantable.name)
+      )
     end
 
     context 'with filepath' do
