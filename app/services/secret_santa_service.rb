@@ -72,59 +72,40 @@ class SecretSantaService
     end
   end
 
-  def print_matches(matches, dir = 'SecretSanta')
+  def print_matches(matches, dir = Rails.root.join('tmp/secret_santa'))
     require 'fileutils'
 
     FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-    matches.each do |k, v|
-      filepath = "#{dir}/#{k.to_s.capitalize}.txt"
-      File.open(filepath, 'w') do |file|
-        file.write("Your Secret Santa is:\n")
-        file.write('==> ' + v[:secret].to_s + ' <==')
-        file.write("\n\n")
-        file.write("Brought to you by\n")
-        file.write("The wonderful\n")
-        file.write('Santa\'s Little App Helper')
-      end
+    matches.each do |_k, v|
+      liquid_options = {
+        'Giver' => v[:name],
+        'Receiver' => v[:secret][:name],
+        'SecretSanta' => @secret_santa.name
+      }
+      filename = parse_liquid(@secret_santa.filename, liquid_options)
+      file_content = parse_liquid(@secret_santa.file_content, liquid_options)
+      filepath = "#{dir}/#{filename}.txt"
+      File.open(filepath, 'w') { |file| file.write(file_content) }
       v[:file] = filepath
     end
   end
 
   def mail_matches(matches)
-    # require 'mail'
-    #
-    # options = {
-    #   address: 'smtp.gmail.com',
-    #   port: 587,
-    #   user_name: 'santas.app.helper@gmail.com',
-    #   password: 'LamNmXn6nZKa6PTAPR',
-    #   authentication: 'plain',
-    #   enable_starttls_auto: true
-    # }
-    #
-    # Mail.defaults do
-    #   delivery_method :smtp, options
-    # end
-    #
-    # matches.each do |k, v|
-    #   next if v[:email].empty?
-    #   Rails.logger.info "Sending mail to: #{v[:email]}"
-    #
-    #   mail = Mail.new
-    #   mail.to v[:email]
-    #   mail.from 'Secret Santa App <santas.app.helper@gmail.com>'
-    #   mail.subject 'Secret Santa - Shhhhh'
-    #   mail.body "#{k.to_s.capitalize} attached is your Secret Santa.\nKeep it a secret!!"
-    #   mail.add_file(v[:file])
-    #   mail.deliver
-    #   sleep 1
-    # end
+    matches.each do |id, match|
+      SecretSantaMailer.participant(id, match[:secret][:name], match[:file]).deliver
+      sleep 1
+    end
   end
 
   def cleanup_files(matches)
     matches.each do |_k, v|
       File.delete(v[:file])
     end
+  end
+
+  def parse_liquid(text, template_options = {})
+    template = Liquid::Template.parse(text)
+    template.render(template_options)
   end
 end
