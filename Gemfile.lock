@@ -96,6 +96,7 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.4.1)
       launchy (~> 2.2)
+    liquid (4.0.0)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.4)
@@ -220,6 +221,7 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks (~> 2.1)
   letter_opener
+  liquid (~> 4.0)
   mysql2 (~> 0.3.18)
   rails (= 4.2.3)
   rspec-rails

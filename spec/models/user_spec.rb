@@ -14,9 +14,9 @@ RSpec.describe User, type: :model do
         expect(user.valid?).to be_falsey
       end
 
-      it 'should return false if the last_name is blank' do
+      it 'should return true if the last_name is blank' do
         user.last_name = '     '
-        expect(user.valid?).to be_falsey
+        expect(user.valid?).to be_truthy
       end
     end
 
