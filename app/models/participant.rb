@@ -12,7 +12,6 @@ class Participant < ActiveRecord::Base
 
   def autosave_associated_records_for_user
     return if user.nil?
-    # Find or create the author by name
     if user && new_user = User.find_by(email: user.email)
       self.user = new_user
     elsif user

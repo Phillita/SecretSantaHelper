@@ -5,7 +5,7 @@ class SecretSanta < ActiveRecord::Base
   belongs_to :user, autosave: true
   alias_attribute :owner, :user
   has_many :secret_santa_participants, as: :participantable
-  # has_many :matched_participants
+  has_many :secret_santa_participant_matches, through: :secret_santa_participants
 
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :secret_santa_participants, reject_if: :all_blank, allow_destroy: true
@@ -13,7 +13,6 @@ class SecretSanta < ActiveRecord::Base
   before_create :default_email_and_file
 
   def autosave_associated_records_for_user
-    # Find or create the author by name
     if user && new_user = User.find_by(email: user.email)
       self.user = new_user
     elsif user
@@ -24,7 +23,11 @@ class SecretSanta < ActiveRecord::Base
 
   # either the user said this is a test or has selected to not have a file or email sent
   def test?
-    test_run.present? || (!send_email? && !send_file?)
+    test_run.present? || unables_to_send?
+  end
+
+  def unables_to_send?
+    !send_email? && !send_file?
   end
 
   def ready?
@@ -37,6 +40,10 @@ class SecretSanta < ActiveRecord::Base
         hsh[participant.id] = participant.to_h
       end
     end
+  end
+
+  def make_magic!
+    SecretSantaService.new(self).make_magic!
   end
 
   private
@@ -52,8 +59,7 @@ class SecretSanta < ActiveRecord::Base
             SecretSantaParticipantException[:exception_id].not_eq(participant.id)
             .or(SecretSantaParticipantException[:id].eq(nil))
           )
-        )
-        .any?
+        ).any?
     end.reject { |value| value }.empty?
   end
 

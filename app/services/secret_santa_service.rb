@@ -10,11 +10,12 @@ class SecretSantaService
   end
 
   def make_magic!
-    @matches = find_matches(@secret_santa.to_h)
+    matches = find_matches(@secret_santa.to_h)
+    save_matches(matches)
     unless @secret_santa.test?
-      print_matches(@matches) if @secret_santa.send_file?
-      mail_matches(@matches) if @secret_santa.send_email?
-      cleanup_files(@matches) if @secret_santa.send_file?
+      print_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_file?
+      mail_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_email?
+      cleanup_files(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_file?
       @secret_santa.update_attribute(:last_run_on, Time.zone.now)
     end
     true
@@ -72,35 +73,44 @@ class SecretSantaService
     end
   end
 
+  def save_matches(matches)
+    matches.each do |id, match|
+      secret_santa_participant_match = @secret_santa.secret_santa_participant_matches.where(secret_santa_participant_id: id).first_or_initialize
+      secret_santa_participant_match.test = @secret_santa.test?
+      secret_santa_participant_match.match_id = match[:secret][:id]
+      secret_santa_participant_match.save
+    end
+  end
+
   def print_matches(matches, dir = Rails.root.join('tmp/secret_santa'))
     require 'fileutils'
 
     FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
-    matches.each do |_k, v|
+    matches.each do |match|
       liquid_options = {
-        'Giver' => v[:name],
-        'Receiver' => v[:secret][:name],
+        'Giver' => match.giver_name,
+        'Receiver' => match.name,
         'SecretSanta' => @secret_santa.name
       }
       filename = parse_liquid(@secret_santa.filename, liquid_options)
       file_content = parse_liquid(@secret_santa.file_content, liquid_options)
       filepath = "#{dir}/#{filename}.txt"
       File.open(filepath, 'w') { |file| file.write(file_content) }
-      v[:file] = filepath
+      match.file = filepath
     end
   end
 
   def mail_matches(matches)
-    matches.each do |id, match|
-      SecretSantaMailer.participant(id, match[:secret][:name], match[:file]).deliver
+    matches.each do |match|
+      SecretSantaMailer.participant(match.secret_santa_participant_id, match.name, match[:file]).deliver
       sleep 1
     end
   end
 
   def cleanup_files(matches)
-    matches.each do |_k, v|
-      File.delete(v[:file])
+    matches.each do |match|
+      File.delete(match.file)
     end
   end
 

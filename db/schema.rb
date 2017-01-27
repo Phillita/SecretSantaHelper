@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170109013731) do
+ActiveRecord::Schema.define(version: 20170127031928) do
 
   create_table "participants", force: :cascade do |t|
     t.string   "participantable_type", limit: 255
@@ -24,6 +24,14 @@ ActiveRecord::Schema.define(version: 20170109013731) do
   create_table "secret_santa_participant_exceptions", force: :cascade do |t|
     t.integer  "exception_id",                limit: 4
     t.integer  "secret_santa_participant_id", limit: 4
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  create_table "secret_santa_participant_matches", force: :cascade do |t|
+    t.integer  "match_id",                    limit: 4
+    t.integer  "secret_santa_participant_id", limit: 4
+    t.boolean  "test"
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
   end
