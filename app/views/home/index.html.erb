@@ -10,9 +10,9 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-lg-6">
+  <div class="col-lg-offset-1 col-lg-3">
     <div class="card" style="width: 20rem;">
-      <img class="card-img-top" src="..." alt="Card image cap">
+      <%= image_tag 'secret_santa_hero', class: 'card-img-top', alt: 'Secret Santa' %>
       <div class="card-block">
         <h4 class="card-title">Secret Santa</h4>
         <p class="card-text">Create your own custom Secret Santa! Free!</p>
@@ -20,7 +20,14 @@
       </div>
     </div>
   </div>
-  <div class="col-lg-6">
-
+  <div class="col-lg-3">
+    <div class="card" style="width: 20rem;">
+      <%= image_tag 'gift_exchange_hero', class: 'card-img-top', alt: 'Gift Exchange' %>
+      <div class="card-block">
+        <h4 class="card-title">Gift Exchange</h4>
+        <p class="card-text">Host a gift exchange using your smartphone!</p>
+        <%= link_to 'Start', '#', class: 'btn btn-primary' %>
+      </div>
+    </div>
   </div>
 </div>
