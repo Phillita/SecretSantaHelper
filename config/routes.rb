@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :secret_santa, path: 'secret_santa' do
     member do
       patch 'match'
+      get 'match'
       post 'unlock'
       get 'access'
     end

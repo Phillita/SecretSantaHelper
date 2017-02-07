@@ -5,8 +5,6 @@ AllCops:
   Exclude:
     - db/schema.rb
 
-  RunRailsCops: true
-
 Style/InlineComment:
   Description: 'Avoid inline comments.'
   Enabled: false

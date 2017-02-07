@@ -57,7 +57,7 @@ class SecretSantaController < ApplicationController
 
   def match
     @secret_santa = SecretSanta.find(params[:id])
-    @secret_santa.update_attributes(secret_santa_params)
+    @secret_santa.update_attributes(secret_santa_params) if can_update?
     @secret_santa.make_magic!
     respond_to do |format|
       format.html

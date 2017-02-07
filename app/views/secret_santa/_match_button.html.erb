@@ -1,0 +1,20 @@
+<%= form_for secret_santa, url: match_secret_santum_path do |f| %>
+  <div class="col-lg-offset-5 col-lg-1">
+    <%= f.check_box :test_run,
+                checked_value: secret_santa.test_run || Time.zone.now,
+                unchecked_value: nil,
+                checked: secret_santa.test_run.present?,
+                data: {
+                  size: 'medium',
+                  on_color: 'success',
+                  off_color: 'danger',
+                  on_text: 'On',
+                  off_text: 'Off',
+                  label_text: 'Test'
+                }
+    %>
+  </div>
+  <div class="col-lg-2">
+    <%= f.submit 'Make Magic!', class: 'btn btn-success', disabled: !secret_santa.ready? %>
+  </div>
+<% end %>

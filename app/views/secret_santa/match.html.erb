@@ -1,3 +1,15 @@
-<%= render 'details', secret_santa: @secret_santa %>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="secret-santa-name">
+      <%= content_tag :h1 do %>
+        <%= link_to_if @secret_santa.persisted?, @secret_santa.name || 'New Secret Santa', @secret_santa %>
+      <% end %>
+      <hr>
+    </div>
+  </div>
+</div>
 
-<%= render 'matches', secret_santa: @secret_santa %>
+<h3>Match Results:</h3>
+
+<%= render 'test_matches', secret_santa: @secret_santa if @secret_santa.test? %>
+<%= render 'match_success', secret_santa: @secret_santa unless @secret_santa.test? %>

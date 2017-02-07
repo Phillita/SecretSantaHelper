@@ -9,6 +9,7 @@
       <%= content_tag :h1 do %>
         <%= secret_santa.name %> <small><%= link_to 'Edit', edit_secret_santum_path(secret_santa) %></small>
       <% end %>
+      <hr>
     </div>
   </div>
 </div>
@@ -52,6 +53,7 @@
 <div class="row">
   <div class="col-lg-12">
     <h2>Ready to begin?</h2>
+    <hr>
   </div>
 </div>
 
@@ -59,7 +61,7 @@
   <div class="col-lg-12">
     <div class="alert alert-info">
       <p>Currently the test flag is set to on and will not send the matches out to participants.</p>
-      <p>Why you ask? See below:</p>
+      <p>Why you ask?</p>
       <ul>
         <%= content_tag :li, 'You have set the test flag below.' if secret_santa.test_run.present? %>
         <%= content_tag :li, 'You haven\'t selected for an email or file to be used.' if !secret_santa.send_file? && !secret_santa.send_email? %>
@@ -68,13 +70,10 @@
   </div>
 <% end if secret_santa.test? %>
 
-<div class="row">
-  <div class="col-lg-12">
-    <div class="text-center">
-      <%= simple_form_for secret_santa, url: match_secret_santum_path do |f| %>
-        <%= f.input :test_run, as: :boolean, checked_value: secret_santa.test_run || Time.zone.now, unchecked_value: nil, checked: secret_santa.test_run.present? %>
-        <%= f.submit 'Begin Matching', class: 'btn btn-success', disabled: !secret_santa.ready? %>
-      <% end %>
+<!-- <div class="row">
+  <div class="col-lg-12"> -->
+    <div class="row text-center">
+      <%= render 'match_button', secret_santa: secret_santa %>
     </div>
-  </div>
-</div>
+  <!-- </div>
+</div> -->

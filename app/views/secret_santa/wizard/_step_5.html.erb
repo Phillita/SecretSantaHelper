@@ -1,12 +1,12 @@
-<%= render 'errors', object: secret_santa if secret_santa.errors.any? && !@back %>
+<%= render 'errors', object: secret_santa if secret_santa.errors.any? && !back %>
 
 
 <%= simple_form_for secret_santa do |f| %>
   <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
   <hr>
-  <%= render 'shared/progress_bar', max_step: max_secret_santa_step, step: 5, pre_title: 'Setup Step' %>
-  <%= render 'secret_santa/wizard/step_progress_breadcrumbs', secret_santa: secret_santa, step: 5 %>
-  <%= hidden_field_tag :step, @step %>
+  <%= render 'shared/progress_bar', max_step: max_secret_santa_step, step: step, pre_title: 'Setup Step' %>
+  <%= render 'secret_santa/wizard/step_progress_breadcrumbs', secret_santa: secret_santa, step: step %>
+  <%= hidden_field_tag :step, step %>
   <h2>How would you like to tell everyone?</h2>
   <details>
     <summary>Why do I need this?</summary>
@@ -53,6 +53,5 @@
     </div>
   </div>
 
-  <%= f.submit current_user ? 'Finish' : 'Next', class: 'btn btn-success' %>
-  <%= f.submit 'Back', class: 'btn btn-primary', style: 'float:left;' %>
+  <%= render 'secret_santa/wizard/buttons', f: f, max_step: max_secret_santa_step, step: step %>
 <% end %>

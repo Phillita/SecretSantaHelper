@@ -1,11 +1,11 @@
-<%= render 'errors', object: secret_santa if secret_santa.errors.any? && !@back %>
+<%= render 'errors', object: secret_santa if secret_santa.errors.any? && !back %>
 
 <%= simple_form_for secret_santa, url: secret_santa.persisted? ? secret_santum_path(secret_santa) : secret_santa_path do |f| %>
   <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
   <hr>
-  <%= render 'shared/progress_bar', max_step: max_secret_santa_step, step: 1, pre_title: 'Setup Step' %>
-  <%= render 'secret_santa/wizard/step_progress_breadcrumbs', secret_santa: secret_santa, step: 1 %>
-  <%= hidden_field_tag :step, @step %>
+  <%= render 'shared/progress_bar', max_step: max_secret_santa_step, step: step, pre_title: 'Setup Step' %>
+  <%= render 'secret_santa/wizard/step_progress_breadcrumbs', secret_santa: secret_santa, step: step %>
+  <%= hidden_field_tag :step, step %>
   <h2>What would you like to name/call it?</h2>
   <details>
     <summary>What's this used for?</summary>
@@ -15,8 +15,8 @@
   <hr>
   <div id="secret_santa_name">
     <%= f.input :name, autofocus: true %>
-    <%= hidden_field_tag :step, @step %>
+    <%= hidden_field_tag :step, step %>
   </div>
 
-  <%= f.submit 'Next', class: 'btn btn-success' %>
+  <%= render 'secret_santa/wizard/buttons', f: f, max_step: max_secret_santa_step, step: step %>
 <% end %>
