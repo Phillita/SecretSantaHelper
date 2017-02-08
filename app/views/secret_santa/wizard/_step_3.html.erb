@@ -1,28 +1,51 @@
 <%= render 'errors', object: secret_santa if secret_santa.errors.any? && !back %>
 
 <%= simple_form_for secret_santa do |f| %>
-  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
-  <hr>
+  <div class="page-header">
+    <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
+  </div>
+
   <%= render 'shared/progress_bar', max_step: max_secret_santa_step, step: step, pre_title: 'Setup Step' %>
   <%= render 'secret_santa/wizard/step_progress_breadcrumbs', secret_santa: secret_santa, step: step %>
   <%= hidden_field_tag :step, step %>
-  <h2>Who's joining you?</h2>
-  <details>
-    <summary>Why do I show up?</summary>
-    <p>We are assuming that you are a participant too!</p>
-    <p>If this is incorrect, feel free to delete yourself below.</p>
-  </details>
-  <hr>
+  <div class="page-header">
+    <h2>Who's joining you?</h2>
+  </div>
 
-  <div id="secret_santa_participants">
-    <%= f.fields_for :secret_santa_participants do |secret_santa_participant| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">Why do I show up?</div>
+    <div class="panel-body">
+      <p>We are assuming that you are a participant too!</p>
+      <p>If this is incorrect, feel free to delete yourself below.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <p>
+        <%= link_to_add_association '+', f, :secret_santa_participants,
+                                    partial: 'secret_santa_participants/secret_santa_participant_fields', class: 'btn btn-success',
+                                    data: { association_insertion_method: :after, association_insertion_node: '#secret_santa_participants' } %>
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div id="secret_santa_participants">
+      <%= f.fields_for :secret_santa_participants do |secret_santa_participant| %>
       <%= render 'secret_santa_participants/secret_santa_participant_fields', f: secret_santa_participant %>
-    <% end %>
-    <%= link_to_add_association 'Add Participant',
-                                f,
-                                :secret_santa_participants,
-                                partial: 'secret_santa_participants/secret_santa_participant_fields',
-                                data: { association_insertion_method: :after } %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12 text-right">
+      <p>
+        <%= link_to_add_association '+', f, :secret_santa_participants,
+                                    partial: 'secret_santa_participants/secret_santa_participant_fields', class: 'btn btn-success',
+                                    data: { association_insertion_method: :after, association_insertion_node: '#secret_santa_participants' } %>
+      </p>
+    </div>
   </div>
 
   <%= render 'secret_santa/wizard/buttons', f: f, max_step: max_secret_santa_step, step: step %>

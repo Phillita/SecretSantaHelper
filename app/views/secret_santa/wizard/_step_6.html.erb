@@ -2,24 +2,31 @@
 
 
 <%= simple_form_for secret_santa do |f| %>
-  <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
-  <hr>
+  <div class="page-header">
+    <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
+  </div>
+
   <%= render 'shared/progress_bar', max_step: max_secret_santa_step, step: step, pre_title: 'Setup Step' %>
   <%= render 'secret_santa/wizard/step_progress_breadcrumbs', secret_santa: secret_santa, step: step %>
   <%= hidden_field_tag :step, step %>
-  <h2>Secure It!</h2>
-  <details>
-    <summary>Why do I need this?</summary>
-    <p>Since you are currently a guest user, we need to make sure others can't get in and access your Secret Santa.</p>
-    <p>To do that, enter a passcode or pin to keep prying eyes away!</p>
-    <p>Some Guidelines:</p>
-    <ul>
-      <li>Minimum of 6 characters.</li>
-      <li>Use letters numbers and symbols.</li>
-      <li>Make sure it's memerable!</li>
+  <div class="page-header">
+    <h2>Secure It!</h2>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Why do I need this?</div>
+    <div class="panel-body">
+      <p>Since you are currently a guest user, we need to make sure others can't get in and access your Secret Santa.</p>
+      <p>To do that, enter a passcode or pin to keep prying eyes away!</p>
+      <p>Some Guidelines:</p>
+    </div>
+
+    <ul class="list-group">
+      <li class="list-group-item">Minimum of 6 characters.</li>
+      <li class="list-group-item">Use letters numbers and symbols.</li>
+      <li class="list-group-item">Make sure it's memerable!</li>
     </ul>
-  </details>
-  <hr>
+  </div>
 
   <div id="secret_santa_security" class="row">
     <div class="col-lg-12">

@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-lg-12">
     <div class="progress">
-      <%= content_tag :div, '', class: 'bg-info progress-bar progress-bar-striped progress-bar-animated', style: "width: #{(100.0 / max_step) * step}%", role: 'progressbar', 'aria-valuenow': (100.0 / max_step) * step, 'aria-valuemin': '0', 'aria-valuemax': '100' %>
+      <%= content_tag :div, content_tag(:span, "#{(100.0 / max_step) * step}% Complete", class: 'sr-only'), class: 'progress-bar progress-bar-striped progress-bar-info active', style: "width: #{(100.0 / max_step) * step}%", role: 'progressbar', 'aria-valuenow': (100.0 / max_step) * step, 'aria-valuemin': '0', 'aria-valuemax': '100' %>
     </div>
   </div>
 </div>

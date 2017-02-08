@@ -1,12 +1,16 @@
 <div class="nested-fields">
-  <%= f.fields_for :secret_santa_participant_exceptions do |secret_santa_participant_exception| %>
-    <%= render 'secret_santa_participant_exceptions/secret_santa_participant_exception_fields', f: secret_santa_participant_exception %>
-  <% end %>
-  <%= link_to_add_association "Add Exception for #{f.object.name}",
-                              f,
-                              :secret_santa_participant_exceptions,
-                              partial: 'secret_santa_participant_exceptions/secret_santa_participant_exception_fields',
-                              data: {
-                                association_insertion_method: :after
-                              }  %>
+  <div class="col-lg-4">
+    <div class="panel panel-default">
+      <div id="<%= "#{f.object.id}-exceptions" %>" class="panel-body">
+        <%= f.fields_for :secret_santa_participant_exceptions do |secret_santa_participant_exception| %>
+          <%= render 'secret_santa_participant_exceptions/secret_santa_participant_exception_fields', f: secret_santa_participant_exception %>
+        <% end %>
+      </div>
+      <div class="panel-footer">
+        <%= link_to_add_association "Add Exception for #{f.object.name}", f, :secret_santa_participant_exceptions,
+                                    partial: 'secret_santa_participant_exceptions/secret_santa_participant_exception_fields',
+                                    data: { association_insertion_method: :append, association_insertion_node: "##{f.object.id}-exceptions" }  %>
+        </div>
+      </div>
+  </div>
 </div>

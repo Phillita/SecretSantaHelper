@@ -1,15 +1,21 @@
+<% page_title "#{@secret_santa.name} - Results" %>
 <div class="row">
   <div class="col-lg-12">
-    <div class="secret-santa-name">
+    <div class="secret-santa-name page-header">
       <%= content_tag :h1 do %>
         <%= link_to_if @secret_santa.persisted?, @secret_santa.name || 'New Secret Santa', @secret_santa %>
       <% end %>
-      <hr>
     </div>
   </div>
 </div>
 
-<h3>Match Results:</h3>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3>Match Results</h3>
+  </div>
 
-<%= render 'test_matches', secret_santa: @secret_santa if @secret_santa.test? %>
-<%= render 'match_success', secret_santa: @secret_santa unless @secret_santa.test? %>
+  <div class="panel-body">
+    <%= render 'test_matches', secret_santa: @secret_santa if @secret_santa.test? %>
+    <%= render 'match_success', secret_santa: @secret_santa unless @secret_santa.test? %>
+  </div>
+</div>
