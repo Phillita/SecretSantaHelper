@@ -1,14 +1,18 @@
 <div class="nested-fields">
   <div class="col-lg-4">
     <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4><%= f.object.name %></h4>
+      </div>
       <div id="<%= "#{f.object.id}-exceptions" %>" class="panel-body">
         <%= f.fields_for :secret_santa_participant_exceptions do |secret_santa_participant_exception| %>
           <%= render 'secret_santa_participant_exceptions/secret_santa_participant_exception_fields', f: secret_santa_participant_exception %>
         <% end %>
       </div>
-      <div class="panel-footer">
-        <%= link_to_add_association "Add Exception for #{f.object.name}", f, :secret_santa_participant_exceptions,
+      <div class="panel-footer text-right">
+        <%= link_to_add_association "+", f, :secret_santa_participant_exceptions,
                                     partial: 'secret_santa_participant_exceptions/secret_santa_participant_exception_fields',
+                                    class: 'btn btn-success',
                                     data: { association_insertion_method: :append, association_insertion_node: "##{f.object.id}-exceptions" }  %>
         </div>
       </div>

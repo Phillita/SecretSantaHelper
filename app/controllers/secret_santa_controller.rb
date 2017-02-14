@@ -16,9 +16,7 @@ class SecretSantaController < ApplicationController
     wizard(@secret_santa)
 
     respond_to do |format|
-      if current_user && @step == 6
-        format.html { redirect_to @secret_santa }
-      elsif @step == 7
+      if @step == 4
         format.html { redirect_to @secret_santa }
       else
         format.html { render :new }
@@ -99,10 +97,14 @@ class SecretSantaController < ApplicationController
     return if errors
 
     case @step
-    when 2
+    when 1
       secret_santa.build_user(guest: Time.zone.now) unless secret_santa.user
-    when 3
+    when 2
       secret_santa.secret_santa_participants.where(user_id: secret_santa.user_id).first_or_initialize
+    when 3
+      secret_santa.secret_santa_participants.each do |participant|
+        participant.secret_santa_participant_exceptions.build
+      end
     end
   end
 

@@ -8,6 +8,6 @@ module SecretSantaHelper
   end
 
   def max_secret_santa_step
-    current_user ? 5 : 6
+    3
   end
 end

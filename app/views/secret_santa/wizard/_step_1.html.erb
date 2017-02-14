@@ -10,20 +10,66 @@
   <%= hidden_field_tag :step, step %>
 
   <div class="page-header">
-    <h2>What would you like to name/call it?</h2>
+    <h2>First Steps</h2>
   </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">What's this used for?</div>
-    <div class="panel-body">
-      <p>This will be your reference back to this Secret Santa.</p>
-      <p>You can also use this title later on in the setup process for emails/text files.</p>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>What would you like to call it?</h4>
+        </div>
+        <div class="panel-body">
+          <div id="secret_santa_name">
+            <%= f.input :name, autofocus: true, label_html: { class: 'hidden' }, placeholder: 'Name' %>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <h5>Why?</h5>
+          <p>This will be your reference back to this Secret Santa.</p>
+          <p>You can also use this title later on in the setup process for emails/text files.</p>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div id="secret_santa_name">
-    <%= f.input :name, autofocus: true %>
-    <%= hidden_field_tag :step, step %>
+    <div class="col-lg-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Who are you?</h4>
+        </div>
+        <div class="panel-body">
+          <div id="secret_santa_user">
+            <%= f.simple_fields_for :user do |user| %>
+              <%= render 'users/user_fields', f: user %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%= content_tag :div, class: 'col-lg-4' do %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Secure It!</h4>
+        </div>
+        <div class="panel-body">
+          <div id="secret_santa_security">
+            <%= f.input :passphrase, label_html: { class: 'hidden' }, placeholder: 'Passphrase' %>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <h5>Why?</h5>
+          <p>Currently you are a guest on the site. If you'd rather other not be able to find and enter your Secret Santa, give it a passphrase!</p>
+          <p>Guidelines:</p>
+
+          <ul>
+            <li>Minimum of 6 characters.</li>
+            <li>Use letters numbers and symbols.</li>
+            <li>Make sure it's memerable!</li>
+          </ul>
+        </div>
+      </div>
+    <% end unless current_user %>
   </div>
 
   <%= render 'secret_santa/wizard/buttons', f: f, max_step: max_secret_santa_step, step: step %>
