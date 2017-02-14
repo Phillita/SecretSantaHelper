@@ -1,0 +1,102 @@
+<%= render 'errors', object: secret_santa if secret_santa.errors.any? && !back %>
+
+
+<%= simple_form_for secret_santa do |f| %>
+  <div class="page-header">
+    <h1><%= link_to_if secret_santa.persisted?, secret_santa.name || 'New Secret Santa', secret_santa %></h1>
+  </div>
+
+  <%= render 'shared/progress_bar', max_step: max_secret_santa_step, step: step, pre_title: 'Setup Step' %>
+  <%= render 'secret_santa/wizard/step_progress_breadcrumbs', secret_santa: secret_santa, step: step %>
+  <%= hidden_field_tag :step, step %>
+  <div class="page-header">
+    <h2>How would you like to tell everyone?</h2>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Why do I need this?</div>
+    <div class="panel-body">
+      <p>In order to get the info to everyone, you need to provide us with a way. It's also an easy way for us to make sure that it's a suprise for you!</p>
+    </div>
+
+    <table class="table">
+      <tr>
+        <td>Email</td>
+        <td>We will send the person who they are buying for in the sent email.</td>
+      </tr>
+      <tr>
+        <td>File</td>
+        <td>The file will be named for the individual who should get the file. Their Secret Santa will be inside.</td>
+      </tr>
+      <tr>
+        <td>Both</td>
+        <td>We'll send a file with the email.</td>
+      </tr>
+      <tr>
+        <td>None</td>
+        <td>Test mode will diplay the results on the page when you click 'Begin Matching'.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="secret_santa_notifications" class="row">
+    <div class="col-lg-5">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="text-center">I want an Email!</h3>
+        </div>
+        <div class="panel-body">
+          <%= f.input :email_subject, autofocus: true %>
+          <%= f.label 'Email content', for: :email_content %>
+          <%= f.trix_editor :email_content %>
+        </div>
+        <div class="panel-footer">
+          <div class="text-right">
+            <%= f.input :send_email, label: false, input_html: {
+                         data: { size: 'small', on_color: 'success',
+                                 off_color: 'default', on_text: 'On',
+                                 off_text: 'Off', label_text: 'Email' } } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-2">
+      <div class="page-header">
+        <h3 class="text-center">and/or</h3>
+        <h4 class="text-center">Tips for your email/file:</h4>
+      </div>
+      <dl>
+        <dt>{{Giver}}</dt>
+        <dd>- The name of the person giving the gift.</dd>
+        <dt>{{Receiver}}</dt>
+        <dd>- The name of the person the giver will be giving to.</dd>
+        <dt>{{SecretSanta}}</dt>
+        <dd>- The name of the current Secret Santa you are creating.</dd>
+      </dl>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="text-center">I want a File!</h3>
+        </div>
+        <div class="panel-body">
+          <%= f.input :filename %>
+          <%= f.label 'File content', for: :file_content %>
+          <%= f.trix_editor :email_content %>
+        </div>
+        <div class="panel-footer">
+          <div class="text-right">
+            <%= f.input :send_file, label: false, input_html: {
+                         data: { size: 'small', on_color: 'success',
+                                 off_color: 'default', on_text: 'On',
+                                 off_text: 'Off', label_text: 'File' } } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%= render 'secret_santa/wizard/buttons', f: f, max_step: max_secret_santa_step, step: step %>
+<% end %>
