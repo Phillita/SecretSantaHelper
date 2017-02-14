@@ -96,12 +96,14 @@ class SecretSantaController < ApplicationController
     errors = secret_santa.errors.any?
     @step += 1 unless back? || errors.present?
     @step -= 1 if back?
+    return if errors
+
     case @step
     when 2
       secret_santa.build_user(guest: Time.zone.now) unless secret_santa.user
     when 3
       secret_santa.secret_santa_participants.where(user_id: secret_santa.user_id).first_or_initialize
-    end unless errors
+    end
   end
 
   def wizard_step
