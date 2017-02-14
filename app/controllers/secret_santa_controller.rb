@@ -1,6 +1,11 @@
 class SecretSantaController < ApplicationController
   load_and_authorize_resource :secret_santa
 
+  def index
+    @secret_santas = SecretSanta.all
+    @my_secret_santas = SecretSanta.where(user: current_user) if current_user
+  end
+
   def create
     @secret_santa = SecretSanta.create(secret_santa_params)
     wizard(@secret_santa)

@@ -1,0 +1,27 @@
+<div class="jumbotron">
+  <div class="container-fluid text-center">
+    <h1>Secret Santa Helper</h1>
+    <p>Making a Secre Santa shouldn't be hard. We've simplified it down to 3 easy steps!</p>
+
+    <div class="row top-30">
+      <div class="col-lg-offset-2 col-lg-3">
+        <%= render 'shared/card',
+                   title: 'Step 1.',
+                   description: 'The easy stuff: You, the name, and some security.',
+                   img: { name: 'secret_santa_info', title: 'Standard Info', alt: 'Standard Info' } %>
+      </div>
+      <div class="col-lg-3">
+        <%= render 'shared/card',
+                   title: 'Step 2.',
+                   description: 'Add some friends and family!',
+                   img: { name: 'secret_santa_friends_family', title: 'Friends and Family', alt: 'Friends and Family' } %>
+      </div>
+      <div class="col-lg-3">
+        <%= render 'shared/card',
+                   title: 'Step 3.',
+                   description: 'The exceptions: we know that not everyone wants to buy for everyone.',
+                   img: { name: 'secret_santa_yes_no', title: 'Exceptions', alt: 'Exceptions' } %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,24 +2,18 @@
 
 <div id="applications" class="row">
   <div class="col-lg-2">
-    <div class="card" style="width: 20rem;">
-      <%= image_tag 'secret_santa_hero', class: 'card-img-top', alt: 'Secret Santa' %>
-      <div class="card-block">
-        <h4 class="card-title">Secret Santa</h4>
-        <p class="card-text">Create your own custom Secret Santa! Free!</p>
-        <%= link_to 'Start', new_secret_santum_path, class: 'btn btn-primary' %>
-      </div>
-    </div>
+    <%= render 'shared/card',
+               title: 'Secret Santa',
+               description: 'Create your own custom Secret Santa! Free!',
+               img: { name: 'secret_santa_hero', title: 'Secret Santa', alt: 'Secret Santa' },
+               lnk: { name: 'Start', path: secret_santa_path, styles: %w(btn btn-primary) } %>
   </div>
 
   <div class="col-lg-2">
-    <div class="card" style="width: 20rem;">
-      <%= image_tag 'gift_exchange_hero', class: 'card-img-top', alt: 'Gift Exchange' %>
-      <div class="card-block">
-        <h4 class="card-title">Gift Exchange</h4>
-        <p class="card-text">Host a gift exchange using your smartphone!</p>
-        <%= link_to 'Start', '#', class: 'btn btn-primary' %>
-      </div>
-    </div>
+    <%= render 'shared/card',
+               title: 'Gift Exchange',
+               description: 'Host a gift exchange using your smartphone!',
+               img: { name: 'gift_exchange_hero', title: 'Gift Exchange', alt: 'Gift Exchange' },
+               lnk: { name: 'Start', path: '#', styles: %w(btn btn-primary) } %>
   </div>
 </div>
