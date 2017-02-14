@@ -1,25 +1,28 @@
-<% persisted = secret_santa.persisted? %>
+<%
+  persisted = secret_santa.persisted?
+  ready = secret_santa.ready?
+%>
 <div class="row">
   <div class="col-lg-12">
     <ol class="breadcrumb text-center">
       <%= content_tag :li, class: "breadcrumb-item #{'active' if step == 1}" do %>
-        <%= link_to_if step != 1 && persisted, 'Name it!',  persisted ? edit_secret_santum_path(secret_santa, step: 0) : 'javascript:void(0)' %>
+        <%= link_to_if step != 1 && persisted && ready, 'Name it!',  persisted ? edit_secret_santum_path(secret_santa, step: 0) : 'javascript:void(0)' %>
       <% end %>
       <%= content_tag :li, class: "breadcrumb-item #{'active' if step == 2}" do %>
-        <%= link_to_if step != 2 && persisted, 'Who Are You?', persisted ? edit_secret_santum_path(secret_santa, step: 1) : 'javascript:void(0)' %>
+        <%= link_to_if step != 2 && persisted && ready, 'Who Are You?', persisted ? edit_secret_santum_path(secret_santa, step: 1) : 'javascript:void(0)' %>
       <% end %>
       <%= content_tag :li, class: "breadcrumb-item #{'active' if step == 3}" do %>
-        <%= link_to_if step != 3 && persisted, 'Who\'s In?', persisted ? edit_secret_santum_path(secret_santa, step: 2) : 'javascript:void(0)' %>
+        <%= link_to_if step != 3 && persisted && ready, 'Who\'s In?', persisted ? edit_secret_santum_path(secret_santa, step: 2) : 'javascript:void(0)' %>
       <% end %>
       <%= content_tag :li, class: "breadcrumb-item #{'active' if step == 4}" do %>
-        <%= link_to_if step != 4 && persisted, 'Any Exceptions?', persisted ? edit_secret_santum_path(secret_santa, step: 3) : 'javascript:void(0)' %>
+        <%= link_to_if step != 4 && persisted && ready, 'Any Exceptions?', persisted ? edit_secret_santum_path(secret_santa, step: 3) : 'javascript:void(0)' %>
       <% end %>
       <%= content_tag :li, class: "breadcrumb-item #{'active' if step == 5}" do %>
-        <%= link_to_if step != 5 && persisted, 'How Do I Contact Them?', persisted ? edit_secret_santum_path(secret_santa, step: 4) : 'javascript:void(0)' %>
+        <%= link_to_if step != 5 && persisted && ready, 'How Do I Contact Them?', persisted ? edit_secret_santum_path(secret_santa, step: 4) : 'javascript:void(0)' %>
       <% end %>
       <% unless current_user %>
         <%= content_tag :li, class: "breadcrumb-item #{'active' if step == 6}" do %>
-          <%= link_to_if step != 6 && persisted, 'Secure It!', persisted ? edit_secret_santum_path(secret_santa, step: 5) : 'javascript:void(0)' %>
+          <%= link_to_if step != 6 && persisted && ready, 'Secure It!', persisted ? edit_secret_santum_path(secret_santa, step: 5) : 'javascript:void(0)' %>
         <% end %>
       <% end %>
     </ol>
