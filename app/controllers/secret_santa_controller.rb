@@ -92,6 +92,15 @@ class SecretSantaController < ApplicationController
     end
   end
 
+  def clone
+    og_secret_santa = SecretSanta.find(params[:id])
+    secret_santa = og_secret_santa.clone
+
+    respond_to do |format|
+      format.html { redirect_to edit_secret_santum_path(secret_santa) }
+    end
+  end
+
   private
 
   def wizard(secret_santa)

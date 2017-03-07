@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       get 'match'
       post 'unlock'
       get 'access'
+      get 'clone'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.

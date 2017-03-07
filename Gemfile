@@ -37,14 +37,14 @@ gem 'devise'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'arel-helpers', '~> 2.3'
+gem 'bootstrap-switch-rails', '~> 3.3', '>= 3.3.3'
 gem 'cancancan', '~> 1.10'
-gem 'simple_form'
 gem 'cocoon', '~> 1.2', '>= 1.2.9'
 gem 'jquery-turbolinks', '~> 2.1'
-gem 'trix', '~> 0.9.10'
-gem 'arel-helpers', '~> 2.3'
 gem 'liquid', '~> 4.0'
-gem 'bootstrap-switch-rails', '~> 3.3', '>= 3.3.3'
+gem 'simple_form'
+gem 'trix', '~> 0.9.10'
 
 group :development do
   gem 'letter_opener'
@@ -61,9 +61,9 @@ group :development, :test do
   gem 'byebug'
   gem 'database_cleaner', '~> 1.4.1'
 
-  gem 'rspec-rails'
-  gem 'factory_girl'
   gem 'better_errors', '~> 2.1', '>= 2.1.1'
+  gem 'factory_girl'
+  gem 'rspec-rails'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'

@@ -23,15 +23,19 @@ class SecretSanta < ActiveRecord::Base
 
   # either the user said this is a test or has selected to not have a file or email sent
   def test?
-    test_run.present? || unables_to_send?
+    test_run.present? || unable_to_send?
   end
 
-  def unables_to_send?
+  def unable_to_send?
     !send_email? && !send_file?
   end
 
   def ready?
     secret_santa_participants.any? && participants_can_all_be_matched?
+  end
+
+  def complete?
+    last_run_on.present?
   end
 
   def to_h
@@ -44,6 +48,12 @@ class SecretSanta < ActiveRecord::Base
 
   def make_magic!
     SecretSantaService.new(self).make_magic!
+  end
+
+  def clone
+    # clone self and save (prepend something to the name, null out the last_run_on date)
+    # then clone all participants and save
+    # then figure out the exceptions for each participant
   end
 
   private

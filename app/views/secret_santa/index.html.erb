@@ -42,11 +42,19 @@
   </div>
 </div>
 
-<ul class="nav nav-tabs" role="tablist">
-  <li role="presentation" class="active"><%= link_to 'Mine', '#mine', aria: { controls: 'mine' }, role: 'tab', data: { toggle: 'tab' }, disabled: current_user.nil? %></li>
-</ul>
+<% if current_user %>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><%= link_to 'Mine', '#mine', aria: { controls: 'mine' }, role: 'tab', data: { toggle: 'tab' }, disabled: current_user.nil? %></li>
+  </ul>
 
-<!-- Tab panes -->
-<div class="tab-content">
-  <div role="tabpanel" class="tab-pane" id="mine">...</div>
-</div>
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane" id="mine">
+    </div>
+  </div>
+<% else %>
+  <%= render 'shared/call_to_action_jumbotron', title: 'Hello Guest!',
+                                                help_text: "Here you would usually find your previous Secret Santa's. Sign up here or login to unlock this section.",
+                                                link_text: 'Sign up now!',
+                                                url: new_user_registration_path %>
+<% end %>
