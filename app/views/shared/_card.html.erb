@@ -2,7 +2,7 @@
   lnk ||= false
   img ||= false
 %>
-<div class="card" style="width: 20rem;">
+<div class="card card-lg">
   <%= image_tag img[:name], class: 'card-img-top', alt: img[:alt], title: img[:title] if img %>
   <div class="card-block">
     <%= content_tag :h4, title, class: 'card-title' %>

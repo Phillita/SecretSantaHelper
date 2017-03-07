@@ -1,4 +1,6 @@
 .card {
+  width: 20rem;
+
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -30,6 +32,15 @@
 
     .card-title {
       margin-bottom: .75rem;
+    }
+  }
+
+  &.card-lg {
+    width: 25rem;
+
+    .card-img-top {
+      height: 215px;
+      width: 248px;
     }
   }
 }
