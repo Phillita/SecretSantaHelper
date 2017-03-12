@@ -1,5 +1,6 @@
 class SecretSanta < ActiveRecord::Base
   include ArelHelpers::ArelTable
+  extend FriendlyId
   self.table_name = 'secret_santas'
 
   belongs_to :user, autosave: true
@@ -7,10 +8,14 @@ class SecretSanta < ActiveRecord::Base
   has_many :secret_santa_participants, as: :participantable, dependent: :destroy
   has_many :secret_santa_participant_matches, through: :secret_santa_participants, dependent: :destroy
 
+  validates :slug, presence: true
+
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :secret_santa_participants, reject_if: :all_blank, allow_destroy: true
 
   before_create :default_email_and_file
+
+  friendly_id :name, use: [:slugged, :finders]
 
   def autosave_associated_records_for_user
     if user && new_user = User.find_by(email: user.email)
@@ -69,7 +74,7 @@ class SecretSanta < ActiveRecord::Base
             .or(SecretSantaParticipantException[:id].eq(nil))
           )
         ).any?
-    end.reject { |value| value }.empty?
+    end.reject { |truthy_falsey| truthy_falsey }.empty?
   end
 
   def default_email_and_file
@@ -77,5 +82,9 @@ class SecretSanta < ActiveRecord::Base
     self.email_content = 'Hey {{Giver}}! Just in case you were wondering... Your Secret Santa for {{SecretSanta}} is: {{Receiver}}'
     self.filename = '{{Giver}}-secret-santa'
     self.file_content = 'Hey {{Giver}}! Just in case you were wondering... Your Secret Santa for {{SecretSanta}} is: {{Receiver}}'
+  end
+
+  def should_generate_new_friendly_id?
+    name_changed? || super
   end
 end
