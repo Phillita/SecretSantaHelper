@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   root to: 'home#index'
 
-  resources :secret_santa, path: 'secret_santa' do
+  resources :secret_santa, path: 'secret-santa' do
     member do
       patch 'match'
       get 'match'
@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get 'clone'
     end
   end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
