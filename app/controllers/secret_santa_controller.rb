@@ -97,7 +97,28 @@ class SecretSantaController < ApplicationController
     secret_santa = og_secret_santa.clone
 
     respond_to do |format|
-      format.html { redirect_to edit_secret_santum_path(secret_santa) }
+      if secret_santa
+        flash[:success] = 'Secret Santa cloned successfully!'
+        format.html { redirect_to edit_secret_santum_path(secret_santa) }
+      else
+        flash[:error] = 'Sorry! We failed to clone this Secret Santa.'
+        format.html { redirect_to secret_santum_path(og_secret_santa) }
+      end
+    end
+  end
+
+  def destroy
+    secret_santa = SecretSanta.find(params[:id])
+
+    respond_to do |format|
+      if secret_santa.complete?
+        flash[:error] = 'Secret Santa could not be deleted since it has been completed.'
+        format.html { redirect_to secret_santum_path(secret_santa) }
+      else
+        secret_santa.destroy
+        flash[:success] = 'Secret Santa deleted successfully!'
+        format.html { redirect_to secret_santas_path }
+      end
     end
   end
 

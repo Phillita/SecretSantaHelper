@@ -4,8 +4,8 @@ class SecretSanta < ActiveRecord::Base
 
   belongs_to :user, autosave: true
   alias_attribute :owner, :user
-  has_many :secret_santa_participants, as: :participantable
-  has_many :secret_santa_participant_matches, through: :secret_santa_participants
+  has_many :secret_santa_participants, as: :participantable, dependent: :destroy
+  has_many :secret_santa_participant_matches, through: :secret_santa_participants, dependent: :destroy
 
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :secret_santa_participants, reject_if: :all_blank, allow_destroy: true
@@ -51,9 +51,8 @@ class SecretSanta < ActiveRecord::Base
   end
 
   def clone
-    # clone self and save (prepend something to the name, null out the last_run_on date)
-    # then clone all participants and save
-    # then figure out the exceptions for each participant
+    service = SecretSantaCloner.new(self)
+    return service.cloned_secret_santa if service.clone
   end
 
   private
