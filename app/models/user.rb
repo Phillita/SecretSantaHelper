@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include ArelHelpers::ArelTable
   # Include default devise modules. Others available are:
   # :timeoutable, :omniauthable, :validatable
   devise :database_authenticatable, :registerable,

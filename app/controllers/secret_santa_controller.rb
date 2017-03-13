@@ -2,8 +2,15 @@ class SecretSantaController < ApplicationController
   load_and_authorize_resource :secret_santa
 
   def index
-    @secret_santas = SecretSanta.all
     @my_secret_santas = SecretSanta.where(user: current_user) if current_user
+    params[:active] ||= 'mine'
+    if params[:search] && secret_santa_search_params[:email] && secret_santa_search_params[:name]
+      @secret_santas = SecretSanta.by_email(secret_santa_search_params[:email])
+                                  .by_name(secret_santa_search_params[:name])
+    end
+    respond_to do |format|
+      format.html
+    end
   end
 
   def create
@@ -177,5 +184,9 @@ class SecretSantaController < ApplicationController
                                              user_attributes: [:first_name, :last_name, :email, :guest],
                                              secret_santa_participant_exceptions_attributes: [:id, :exception_id, :_destroy]]
     )
+  end
+
+  def secret_santa_search_params
+    params.require(:search).permit(:name, :email)
   end
 end

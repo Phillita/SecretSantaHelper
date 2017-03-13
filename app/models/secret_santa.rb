@@ -17,6 +17,9 @@ class SecretSanta < ActiveRecord::Base
 
   friendly_id :name, use: [:slugged, :finders]
 
+  scope :by_email, ->(email) { joins(:user).where(User[:email].matches("%#{email}%")) unless email.blank? }
+  scope :by_name, ->(name) { where(SecretSanta[:name].matches("%#{name}%")) unless name.blank? }
+
   def autosave_associated_records_for_user
     if user && new_user = User.find_by(email: user.email)
       self.user = new_user
@@ -41,6 +44,10 @@ class SecretSanta < ActiveRecord::Base
 
   def complete?
     last_run_on.present?
+  end
+
+  def secure?
+    passphrase.present?
   end
 
   def to_h

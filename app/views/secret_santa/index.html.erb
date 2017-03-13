@@ -42,19 +42,106 @@
   </div>
 </div>
 
-<% if current_user %>
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><%= link_to 'Mine', '#mine', aria: { controls: 'mine' }, role: 'tab', data: { toggle: 'tab' }, disabled: current_user.nil? %></li>
+    <li role="presentation" class="<%= active?(params[:active], 'mine') %>"><%= link_to 'Mine', '#mine', aria: { controls: 'mine' }, role: 'tab', data: { toggle: 'tab' } %></li>
+    <li role="presentation" class="<%= active?(params[:active], 'search') %>"><%= link_to 'Search', '#search', aria: { controls: 'search' }, role: 'tab', data: { toggle: 'tab' } %></li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div role="tabpanel" class="tab-pane" id="mine">
+    <div role="tabpanel" class="tab-pane <%= active?(params[:active], 'mine') %>" id="mine">
+      <div class="row  top-15">
+        <div class="col-lg-12">
+          <%= render 'shared/call_to_action_jumbotron', { title: 'Hello Guest!',
+                                                          help_text: "Here you would usually find your previous Secret Santa's. Sign up or login to unlock this section.",
+                                                          link_text: 'Sign up now!',
+                                                          url: new_user_registration_path } unless current_user %>
+        </div>
+      </div>
+    </div>
+
+    <div role="tabpanel" class="tab-pane <%= active?(params[:active], 'search') %>" id="search">
+      <div class="row top-15">
+        <div class="col-lg-12">
+          <%= form_tag secret_santa_path, method: :get do |f| %>
+            <%= hidden_field_tag :active, 'search' %>
+            <div class="row">
+              <div class="col-lg-3">
+                <div class="form-group">
+                  <%= label_tag 'search[email]', 'Email', class: 'sr-only' %>
+                  <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                    <%= search_field_tag 'search[email]', params.dig(:search, :email), placeholder: 'Email', required: true, class: 'form-control input-lg', autocomplete: :off %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3">
+                <div class="form-group">
+                  <%= label_tag 'search[name]', 'Name', class: 'sr-only' %>
+                  <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                    <%= search_field_tag 'search[name]', params.dig(:search, :name), placeholder: 'Secret Santa Name', class: 'form-control input-lg', autocomplete: :off %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-2">
+                <%= submit_tag 'Search', class: 'btn btn-primary btn-lg' %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @secret_santas.blank? %>
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <p><strong>No Secret Santas found.</strong></p>
+            <p>Please enter search criteria to get started!</p>
+          </div>
+        </div>
+      <% else %>
+        <div class="row">
+          <div class="col-lg-12">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>
+                    <h3>Name</h3>
+                  </th>
+                  <th>
+                    <h3>Participants</h3>
+                  </th>
+                  <th>
+                    <h3>Complete?</h3>
+                  </th>
+                  <th>
+                    <h3>Secured?</h3>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @secret_santas.each do |ss| %>
+                  <tr>
+                    <td>
+                      <%= link_to ss.name || 'Secret Santa', secret_santum_path(ss) %>
+                    </td>
+                    <td>
+                      <%= pluralize(ss.secret_santa_participants.size, 'Participant') %>
+                    </td>
+                    <td class="text-center">
+                      <%= content_tag :span, '', class: "glyphicon #{ss.complete? ? 'glyphicon-ok' : 'glyphicon-remove'}", title: "This Secret Santa is #{ss.complete? ? 'complete' : 'incomplete'}." %>
+                    </td>
+                    <td class="text-center">
+                      <%= content_tag :span, '', class: "glyphicon #{ss.secure? ? 'glyphicon-lock' : 'glyphicon-ok-circle'}", title: "This Secret Santa is #{ss.complete? ? 'locked' : 'unlocked'}." %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
-<% else %>
-  <%= render 'shared/call_to_action_jumbotron', title: 'Hello Guest!',
-                                                help_text: "Here you would usually find your previous Secret Santa's. Sign up or login to unlock this section.",
-                                                link_text: 'Sign up now!',
-                                                url: new_user_registration_path %>
-<% end %>

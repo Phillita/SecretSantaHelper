@@ -10,4 +10,8 @@ module SecretSantaHelper
   def max_secret_santa_step
     3
   end
+
+  def active?(param, tab)
+    param == tab ? 'active' : ''
+  end
 end
