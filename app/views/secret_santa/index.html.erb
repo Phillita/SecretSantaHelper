@@ -94,34 +94,34 @@
         </div>
       </div>
 
-      <% if @secret_santas.blank? %>
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <p><strong>No Secret Santas found.</strong></p>
-            <p>Please enter search criteria to get started!</p>
-          </div>
-        </div>
-      <% else %>
-        <div class="row">
-          <div class="col-lg-12">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>
-                    <h3>Name</h3>
-                  </th>
-                  <th>
-                    <h3>Participants</h3>
-                  </th>
-                  <th>
-                    <h3>Complete?</h3>
-                  </th>
-                  <th>
-                    <h3>Secured?</h3>
-                  </th>
+      <div class="row">
+        <div class="col-lg-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  <h3>Name</h3>
+                </th>
+                <th>
+                  <h3>Participants</h3>
+                </th>
+                <th>
+                  <h3>Complete?</h3>
+                </th>
+                <th>
+                  <h3>Secured?</h3>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if @secret_santas.blank? %>
+                <tr class="text-center">
+                  <td colspan="4"><p><strong>No Secret Santas found.</strong></p></td>
                 </tr>
-              </thead>
-              <tbody>
+                <tr class="text-center">
+                  <td colspan="4"><p>Please enter search criteria to get started!</p></td>
+                </tr>
+              <% else %>
                 <% @secret_santas.each do |ss| %>
                   <tr>
                     <td>
@@ -138,10 +138,10 @@
                     </td>
                   </tr>
                 <% end %>
-              </tbody>
-            </table>
-          </div>
+              <% end %>
+            </tbody>
+          </table>
         </div>
-      <% end %>
+      </div>
     </div>
   </div>

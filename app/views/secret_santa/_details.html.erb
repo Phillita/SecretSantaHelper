@@ -6,15 +6,54 @@
 
 
 <!-- show some object details -->
-<div class="row">
-  <div class="col-lg-12">
-    <div class="secret-santa-name page-header">
-      <%= content_tag :h1 do %>
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="secret-santa-name">
+        <%= content_tag :h1 do %>
         <%= secret_santa.name %> <small><%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), edit_secret_santum_path(secret_santa) unless secret_santa.complete? %> <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-trash'), secret_santum_path(secret_santa), method: :delete unless secret_santa.complete? %></small>
-      <% end %>
+        <% end %>
+      </div>
     </div>
+
+    <% if secret_santa.complete? %>
+      <div class="col-lg-4 text-center">
+        <div class="alert alert-success top-10">
+          <p>This Secret Santa was last run on <strong><%= secret_santa.last_run_on %></strong>.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 text-center">
+        <div class="btn-group top-10">
+          <%= link_to 'Create New Secret Santa', new_secret_santum_path, class: 'btn btn-primary btn-lg' %>
+          <%= link_to 'Clone This Sectret Santa', clone_secret_santum_path(secret_santa), class: 'btn btn-info btn-lg' %>
+        </div>
+      </div>
+    <% else %>
+      <%= content_tag :div, class: 'col-lg-4' do %>
+        <div class="alert alert-info top-10">
+          <p><strong>This is a test for the following reason(s):</strong></p>
+          <ul>
+            <%= content_tag :li, 'You have checked off that this is a test.' if secret_santa.test_run.present? %>
+            <%= content_tag :li, 'You haven\'t selected for an email or file to be used.' if !secret_santa.send_file? && !secret_santa.send_email? %>
+          </ul>
+        </div>
+      <% end if secret_santa.test? %>
+
+      <%= form_for secret_santa, url: match_secret_santum_path do |f| %>
+        <div class="<%= secret_santa.test? ? 'col-lg-offset-2' : 'col-lg-offset-6' %> col-lg-2 top-15">
+          <div class="btn-group">
+            <label class="btn btn-primary btn-lg">
+              <%= f.check_box :test_run, {}, secret_santa.test_run || Time.zone.now, '' %> Test
+            </label>
+            <%= f.submit 'Make Magic!', class: 'btn btn-success btn-lg', disabled: !secret_santa.ready? %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
   </div>
 </div>
+
+
 
 <div class="row">
   <div class="col-lg-12">
@@ -49,16 +88,4 @@
       </div>
     </div>
   <% end %>
-</div>
-
-<div class="row">
-  <div class="col-lg-12">
-    <div class="page-header">
-      <h2>Ready to begin?</h2>
-    </div>
-  </div>
-</div>
-
-<div class="row text-center">
-  <%= render 'match_button', secret_santa: secret_santa %>
 </div>

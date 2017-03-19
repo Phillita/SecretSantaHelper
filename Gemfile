@@ -38,7 +38,6 @@ gem 'devise'
 # gem 'capistrano-rails', group: :development
 
 gem 'arel-helpers', '~> 2.3'
-gem 'bootstrap-switch-rails', '~> 3.3', '>= 3.3.3'
 gem 'cancancan', '~> 1.10'
 gem 'cocoon', '~> 1.2', '>= 1.2.9'
 gem 'friendly_id', '~> 5.2'

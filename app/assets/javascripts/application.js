@@ -17,5 +17,4 @@
 //= require bootstrap-sprockets
 //= require cocoon
 //= require trix
-//= require bootstrap-switch
 //= require_tree .
