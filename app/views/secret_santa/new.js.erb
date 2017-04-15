@@ -1,3 +1,3 @@
-$('#js-new-secret-santa').html("<%= j render secret_santa_wizard_step(@step), secret_santa: @secret_santa, step: @step, back: @back %>");
+$('#js-new-secret-santa').html("<%= j render secret_santa_wizard_step(@step), secret_santa: @secret_santa, step: @step, back: @back, js: true %>");
 $('#js-new-secret-santa').removeClass('hidden');
 $('#js-new-secret-santa').goTo();

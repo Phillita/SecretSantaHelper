@@ -15,6 +15,7 @@ class SecretSantaController < ApplicationController
 
   def create
     @secret_santa = SecretSanta.create(secret_santa_params)
+    unlock_secret_santa(@secret_santa) unless current_user
     wizard(@secret_santa)
 
     respond_to do |format|
@@ -82,11 +83,7 @@ class SecretSantaController < ApplicationController
 
   def unlock
     @secret_santa = SecretSanta.find(params[:id])
-
-    if @secret_santa.passphrase == params[:passphrase]
-      session[:secret_santa] ||= []
-      session[:secret_santa] << params[:id]
-    end
+    unlock_secret_santa(@secret_santa) if @secret_santa.passphrase == params[:passphrase]
 
     respond_to do |format|
       if can_access?(@secret_santa)
@@ -152,7 +149,7 @@ class SecretSantaController < ApplicationController
 
     case @step
     when 1
-      secret_santa.user = current_user if current_user
+      secret_santa.build_user(current_user.attributes) if current_user
       secret_santa.build_user(guest: Time.zone.now) unless secret_santa.user
     when 2
       secret_santa.secret_santa_participants.where(user_id: secret_santa.user_id).first_or_initialize
@@ -173,11 +170,16 @@ class SecretSantaController < ApplicationController
 
   def can_access?(secret_santa)
     return true if secret_santa.passphrase.blank?
-    secret_santa.user == current_user || session.fetch(:secret_santa, []).include?(params[:id])
+    secret_santa.user == current_user || session.fetch(:secret_santa, []).include?(secret_santa.id)
   end
 
   def can_update?
     params[:secret_santa]
+  end
+
+  def unlock_secret_santa(secret_santa)
+    session[:secret_santa] ||= []
+    session[:secret_santa] << secret_santa.id
   end
 
   def secret_santa_params
@@ -191,7 +193,7 @@ class SecretSantaController < ApplicationController
       :file_content,
       :test_run,
       :passphrase,
-      user_attributes: permitted_user_params,
+      user_attributes: [:first_name, :last_name, :email, :guest],
       secret_santa_participants_attributes: [:id,
                                              :_destroy,
                                              user_attributes: [:first_name, :last_name, :email, :guest],
@@ -201,17 +203,5 @@ class SecretSantaController < ApplicationController
 
   def secret_santa_search_params
     params.require(:search).permit(:name, :email)
-  end
-
-  def permitted_user_params
-    [].tap do |arr|
-      if current_user
-        arr << :id
-      else
-        arr << :first_name
-        arr << :last_name
-        arr << :email
-      end
-    end
   end
 end
