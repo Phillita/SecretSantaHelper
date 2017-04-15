@@ -16,4 +16,20 @@ module ApplicationHelper
     FLASH_CLASSES.fetch(flash_type.to_sym, flash_type.to_s)
   end
   alias_method :notification_class, :flash_class
+
+  def resource_name
+    :user
+  end
+
+  def resource
+    @resource ||= User.new
+  end
+
+  def devise_mapping
+    @devise_mapping ||= Devise.mappings[:user]
+  end
+
+  def resource_class
+    devise_mapping.to
+  end
 end

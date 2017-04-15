@@ -1,0 +1,12 @@
+<h2>Log in</h2>
+
+<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <%= f.input :email, as: :email, autofocus: true %>
+  <%= f.input :password, as: :password, autocomplete: 'off' %>
+  <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+  <%= f.submit 'Log in', class: 'btn btn-success' %>
+<% end %>
+
+<% if devise_mapping.registerable? && controller_name != 'registrations' %>
+  <%= link_to 'Sign up', new_registration_path(resource_name) %><br />
+<% end %>

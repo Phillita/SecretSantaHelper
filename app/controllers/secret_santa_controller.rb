@@ -19,6 +19,7 @@ class SecretSantaController < ApplicationController
 
     respond_to do |format|
       format.html { render :new }
+      format.js { render :new }
     end
   end
 
@@ -30,8 +31,10 @@ class SecretSantaController < ApplicationController
     respond_to do |format|
       if @step == 4
         format.html { redirect_to @secret_santa }
+        format.js { redirect_to @secret_santa }
       else
         format.html { render :new }
+        format.js { render :new }
       end
     end
   end
@@ -42,6 +45,7 @@ class SecretSantaController < ApplicationController
 
     respond_to do |format|
       format.html
+      format.js
     end
   end
 
@@ -59,8 +63,10 @@ class SecretSantaController < ApplicationController
     respond_to do |format|
       if can_access?(@secret_santa)
         format.html
+        format.js { render js: "window.location = '#{secret_santum_path(@secret_santa)}'" }
       else
         format.html { redirect_to access_secret_santum_path(@secret_santa) }
+        format.js { redirect_to access_secret_santum_path(@secret_santa) }
       end
     end
   end
@@ -95,7 +101,13 @@ class SecretSantaController < ApplicationController
   def access
     @secret_santa = SecretSanta.find(params[:id])
     respond_to do |format|
-      format.html
+      if can_access?(@secret_santa)
+        format.html { redirect_to secret_santum_path(@secret_santa) }
+        format.js { render js: "window.location = '#{secret_santum_path(@secret_santa)}'" }
+      else
+        format.html
+        format.js { render js: "window.location = '#{access_secret_santum_path(@secret_santa)}'" }
+      end
     end
   end
 
@@ -140,6 +152,7 @@ class SecretSantaController < ApplicationController
 
     case @step
     when 1
+      secret_santa.user = current_user if current_user
       secret_santa.build_user(guest: Time.zone.now) unless secret_santa.user
     when 2
       secret_santa.secret_santa_participants.where(user_id: secret_santa.user_id).first_or_initialize
@@ -178,7 +191,7 @@ class SecretSantaController < ApplicationController
       :file_content,
       :test_run,
       :passphrase,
-      user_attributes: [:first_name, :last_name, :email, :guest],
+      user_attributes: permitted_user_params,
       secret_santa_participants_attributes: [:id,
                                              :_destroy,
                                              user_attributes: [:first_name, :last_name, :email, :guest],
@@ -188,5 +201,17 @@ class SecretSantaController < ApplicationController
 
   def secret_santa_search_params
     params.require(:search).permit(:name, :email)
+  end
+
+  def permitted_user_params
+    [].tap do |arr|
+      if current_user
+        arr << :id
+      else
+        arr << :first_name
+        arr << :last_name
+        arr << :email
+      end
+    end
   end
 end

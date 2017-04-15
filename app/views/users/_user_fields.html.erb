@@ -1,4 +1,5 @@
-<%= f.input :first_name, autofocus: true, required: true, label_html: { class: 'hidden' }, placeholder: 'First Name' %>
-<%= f.input :last_name, label_html: { class: 'hidden' }, placeholder: 'Last Name' %>
-<%= f.input :email, as: :email, required: true, label_html: { class: 'hidden' }, placeholder: 'Email' %>
-<%= f.input :guest, as: :hidden %>
+<%= f.input :first_name, autofocus: true, required: true, label_html: { class: 'hidden' }, placeholder: 'First Name', disabled: current_user.present? %>
+<%= f.input :last_name, label_html: { class: 'hidden' }, placeholder: 'Last Name', disabled: current_user.present? %>
+<%= f.input :email, as: :email, required: true, label_html: { class: 'hidden' }, placeholder: 'Email', disabled: current_user.present? %>
+<%= f.input :guest, as: :hidden unless current_user%>
+<%= f.input :id, as: :hidden if current_user %>

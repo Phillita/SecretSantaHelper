@@ -28,10 +28,13 @@
 
     <div class="row top-30">
       <div class="col-lg-offset-4 col-lg-4 col-md-offset-3 col-md-6 col-sm-12 col-xs-12 text-center">
-        <%= link_to 'Create one now!', new_secret_santum_path, class: 'btn btn-success btn-lg btn-block' %>
+        <%= link_to 'Create one now!', new_secret_santum_path, class: 'btn btn-success btn-lg btn-block', remote: true %>
       </div>
     </div>
   </div>
+</div>
+
+<div id="js-new-secret-santa" class="hidden">
 </div>
 
 <div class="row">
@@ -52,10 +55,29 @@
     <div role="tabpanel" class="tab-pane <%= active?(params[:active], 'mine') %>" id="mine">
       <div class="row  top-15">
         <div class="col-lg-12">
-          <%= render 'shared/call_to_action_jumbotron', { title: 'Hello Guest!',
-                                                          help_text: "Here you would usually find your previous Secret Santa's. Sign up or login to unlock this section.",
-                                                          link_text: 'Sign up now!',
-                                                          url: new_user_registration_path } unless current_user %>
+          <% if current_user %>
+            <div class="row">
+              <div class="col-lg-12">
+                <% if @my_secret_santas.empty? %>
+                  <div class="row text-center">
+                    <div class="col-lg-12">
+                      <p><strong>Strange... It looks like you don't have any Secre Santa's yet!</strong></p>
+                    </div>
+                    <div class="col-lg-12">
+                      <p>Try creating one <strong><%= link_to 'here', new_secret_santum_path, remote: true %></strong>!</p>
+                    </div>
+                  </div>
+                <% else %>
+                  <%= render 'secret_santa/index/secret_santa_table', secret_santas: @my_secret_santas %>
+                <% end %>
+              </div>
+            </div>
+          <% else %>
+            <%= render 'shared/call_to_action_jumbotron', { title: 'Hello Guest!',
+                                                            help_text: "Here you would usually find your previous Secret Santa's. Sign up or login to unlock this section.",
+                                                            link_text: 'Sign up now!',
+                                                            url: new_user_registration_path } %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -96,51 +118,18 @@
 
       <div class="row">
         <div class="col-lg-12">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>
-                  <h3>Name</h3>
-                </th>
-                <th>
-                  <h3>Participants</h3>
-                </th>
-                <th>
-                  <h3>Complete?</h3>
-                </th>
-                <th>
-                  <h3>Secured?</h3>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <% if @secret_santas.blank? %>
-                <tr class="text-center">
-                  <td colspan="4"><p><strong>No Secret Santas found.</strong></p></td>
-                </tr>
-                <tr class="text-center">
-                  <td colspan="4"><p>Please enter search criteria to get started!</p></td>
-                </tr>
-              <% else %>
-                <% @secret_santas.each do |ss| %>
-                  <tr>
-                    <td>
-                      <%= link_to ss.name || 'Secret Santa', secret_santum_path(ss) %>
-                    </td>
-                    <td>
-                      <%= pluralize(ss.secret_santa_participants.size, 'Participant') %>
-                    </td>
-                    <td class="text-center">
-                      <%= content_tag :span, '', class: "glyphicon #{ss.complete? ? 'glyphicon-ok' : 'glyphicon-remove'}", title: "This Secret Santa is #{ss.complete? ? 'complete' : 'incomplete'}." %>
-                    </td>
-                    <td class="text-center">
-                      <%= content_tag :span, '', class: "glyphicon #{ss.secure? ? 'glyphicon-lock' : 'glyphicon-ok-circle'}", title: "This Secret Santa is #{ss.complete? ? 'locked' : 'unlocked'}." %>
-                    </td>
-                  </tr>
-                <% end %>
-              <% end %>
-            </tbody>
-          </table>
+          <% if @secret_santas.nil? || @secret_santas.empty? %>
+            <div class="row text-center">
+              <div class="col-lg-12">
+                <p><strong>No Secret Santas found.</strong></p>
+              </div>
+              <div class="col-lg-12">
+                <p>Please enter search criteria to get started!</p>
+              </div>
+            </div>
+          <% else %>
+            <%= render 'secret_santa/index/secret_santa_table', secret_santas: @secret_santas %>
+          <% end %>
         </div>
       </div>
     </div>
