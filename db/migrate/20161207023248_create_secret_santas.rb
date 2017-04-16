@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSecretSantas < ActiveRecord::Migration
   def change
     create_table :secret_santas do |t|

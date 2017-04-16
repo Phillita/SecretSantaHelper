@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SecretSantaMailer < ApplicationMailer
   default from: 'Secret Santa App <santas.app.helper@gmail.com>'
 

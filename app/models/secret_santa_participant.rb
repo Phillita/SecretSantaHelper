@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SecretSantaParticipant < Participant
   has_many :secret_santa_participant_exceptions, dependent: :destroy
   has_one :secret_santa_participant_match, dependent: :destroy

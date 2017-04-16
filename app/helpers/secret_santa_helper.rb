@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 module SecretSantaHelper
   def secret_santa_wizard_step(step)
     "secret_santa/wizard/step_#{step}"

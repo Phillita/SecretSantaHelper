@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 class SecretSantaController < ApplicationController
   load_and_authorize_resource :secret_santa
 

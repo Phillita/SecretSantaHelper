@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddGuestToUsers < ActiveRecord::Migration
   def change
     add_column :users, :guest, :datetime

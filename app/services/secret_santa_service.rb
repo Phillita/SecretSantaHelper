@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'securerandom'
 
 class SecretSantaService
@@ -35,7 +37,7 @@ class SecretSantaService
       loop do
         available_ids = santa_hsh.reject { |k, v| used.include?(k) || v[:exceptions].include?(id) || k == id }.keys
         element_index = SecureRandom.random_number(available_ids.size)
-        fail SantaExceptions::InfiniteLoopError, "No one can be matched to #{santa_hsh[id][:name]}" if available_ids.empty?
+        raise SantaExceptions::InfiniteLoopError, "No one can be matched to #{santa_hsh[id][:name]}" if available_ids.empty?
         secret_id = available_ids[element_index]
 
         Rails.logger.info "Trying to match #{santa_hsh[id][:name]} (#{id}) with #{santa_hsh[secret_id][:name]} (#{secret_id}).\n"
@@ -53,7 +55,7 @@ class SecretSantaService
         loop_count += 1
         Rails.logger.info "Loop Count: #{loop_count}\n\n"
         break if santa_hsh[id].fetch(:secret, {}).fetch(:id, nil) == secret_id
-        fail SantaExceptions::InfiniteLoopError, 'Failed matching' if loop_count >= id_arr.size + MAX_LOOP
+        raise SantaExceptions::InfiniteLoopError, 'Failed matching' if loop_count >= id_arr.size + MAX_LOOP
       end
     end
     santa_hsh

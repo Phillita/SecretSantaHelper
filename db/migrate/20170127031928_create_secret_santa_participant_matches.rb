@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSecretSantaParticipantMatches < ActiveRecord::Migration
   def change
     create_table :secret_santa_participant_matches do |t|

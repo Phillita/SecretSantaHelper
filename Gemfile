@@ -48,6 +48,9 @@ gem 'trix', '~> 0.9.10'
 
 group :development do
   gem 'letter_opener'
+  gem 'guard'
+  gem 'guard-rspec', require: false
+  gem 'guard-spring'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 end

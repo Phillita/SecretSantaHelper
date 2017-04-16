@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSecretSantaParticipantExceptions < ActiveRecord::Migration
   def change
     create_table :secret_santa_participant_exceptions do |t|

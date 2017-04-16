@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BaseApiController < ApplicationController
   before_filter :parse_request, :authenticate_user_from_token!
 

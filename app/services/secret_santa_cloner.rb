@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SecretSantaCloner
   attr_reader :cloned_secret_santa
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSlugToSecretSanta < ActiveRecord::Migration
   def up
     add_column :secret_santas, :slug, :string, after: :name

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SecretSantaMailer, type: :mailer do
@@ -17,7 +19,8 @@ RSpec.describe SecretSantaMailer, type: :mailer do
         template.render(
           'Giver' => secret_santa_participant.user.name,
           'Receiver' => match_name,
-          'SecretSanta' => secret_santa_participant.participantable.name)
+          'SecretSanta' => secret_santa_participant.participantable.name
+        )
       )
     end
 
@@ -31,7 +34,8 @@ RSpec.describe SecretSantaMailer, type: :mailer do
         template.render(
           'Giver' => secret_santa_participant.user.name,
           'Receiver' => match_name,
-          'SecretSanta' => secret_santa_participant.participantable.name)
+          'SecretSanta' => secret_santa_participant.participantable.name
+        )
       )
     end
 

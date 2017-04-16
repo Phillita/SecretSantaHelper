@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 class User < ActiveRecord::Base
   include ArelHelpers::ArelTable
   # Include default devise modules. Others available are:

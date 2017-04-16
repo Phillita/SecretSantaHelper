@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 class SecretSanta < ActiveRecord::Base
   include ArelHelpers::ArelTable
   extend FriendlyId

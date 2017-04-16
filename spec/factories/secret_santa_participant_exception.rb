@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryGirl.define do
   factory :secret_santa_participant_exception do
     association :exception, factory: :secret_santa_participant
