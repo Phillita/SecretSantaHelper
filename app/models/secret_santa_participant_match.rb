@@ -11,6 +11,16 @@ class SecretSantaParticipantMatch < ActiveRecord::Base
   delegate :name, to: :secret_santa_participant, prefix: :giver
 
   def success?
+    no_exceptions? && not_the_same?
+  end
+
+  private
+
+  def no_exceptions?
     !secret_santa_participant.secret_santa_participant_exceptions.exists?(exception_id: match_id)
+  end
+
+  def not_the_same?
+    match_id != secret_santa_participant_id
   end
 end

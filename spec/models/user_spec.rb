@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let!(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.build_stubbed(:user) }
 
   describe 'validations' do
     it 'should be valid' do
@@ -69,6 +69,8 @@ RSpec.describe User, type: :model do
     end
 
     context 'unique email' do
+      let(:user) { FactoryGirl.build(:user) }
+
       it 'should reject duplicate users' do
         duplicate_user = user.dup
         duplicate_user.email = user.email.upcase

@@ -3,10 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe SecretSantaMailer, type: :mailer do
-  let(:secret_santa_participant) { FactoryGirl.create(:secret_santa_participant) }
+  let(:secret_santa_participant) { FactoryGirl.build_stubbed(:secret_santa_participant) }
+  let(:secret_santa) { FactoryGirl.build_stubbed(:secret_santa) }
   let(:match_name) { 'Match Name' }
 
   describe 'participant' do
+    before(:each) do
+      expect(SecretSantaParticipant).to receive(:find).with(secret_santa_participant.id).and_return(secret_santa_participant)
+      secret_santa.send(:default_email_and_file)
+      allow(secret_santa_participant).to receive(:participantable).and_return(secret_santa)
+    end
+
     subject { SecretSantaMailer.participant(secret_santa_participant.id, match_name) }
 
     it 'should have the sender set to the secret santa app' do
