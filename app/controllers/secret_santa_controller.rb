@@ -195,10 +195,10 @@ class SecretSantaController < ApplicationController
       :file_content,
       :test_run,
       :passphrase,
-      user_attributes: %i[first_name last_name email guest],
+      user_attributes: %i[id first_name last_name email guest],
       secret_santa_participants_attributes: [:id,
                                              :_destroy,
-                                             user_attributes: %i[first_name last_name email guest],
+                                             user_attributes: %i[id first_name last_name email guest],
                                              secret_santa_participant_exceptions_attributes: %i[id exception_id _destroy]]
     )
   end

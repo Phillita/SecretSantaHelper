@@ -14,7 +14,7 @@ class Participant < ActiveRecord::Base
 
   def autosave_associated_records_for_user
     return if user.nil?
-    if user && new_user = User.find_by(email: user.email)
+    if user && !user.persisted? && new_user = User.find_by(email: user.email)
       self.user = new_user
     elsif user
       user.save!

@@ -23,7 +23,7 @@ class SecretSanta < ActiveRecord::Base
   scope :by_name, (->(name) { where(SecretSanta[:name].matches("%#{name}%")) unless name.blank? })
 
   def autosave_associated_records_for_user
-    if user && new_user = User.find_by(email: user.email)
+    if user && !user.persisted? && new_user = User.find_by(email: user.email)
       self.user = new_user
     elsif user
       user.save!
