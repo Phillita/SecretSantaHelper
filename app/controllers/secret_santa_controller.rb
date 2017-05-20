@@ -135,7 +135,7 @@ class SecretSantaController < ApplicationController
       else
         secret_santa.destroy
         flash[:success] = 'Secret Santa deleted successfully!'
-        format.html { redirect_to secret_santas_path }
+        format.html { redirect_to secret_santa_path }
       end
     end
   end
@@ -195,11 +195,11 @@ class SecretSantaController < ApplicationController
       :file_content,
       :test_run,
       :passphrase,
-      user_attributes: [:first_name, :last_name, :email, :guest],
+      user_attributes: %i[first_name last_name email guest],
       secret_santa_participants_attributes: [:id,
                                              :_destroy,
-                                             user_attributes: [:first_name, :last_name, :email, :guest],
-                                             secret_santa_participant_exceptions_attributes: [:id, :exception_id, :_destroy]]
+                                             user_attributes: %i[first_name last_name email guest],
+                                             secret_santa_participant_exceptions_attributes: %i[id exception_id _destroy]]
     )
   end
 

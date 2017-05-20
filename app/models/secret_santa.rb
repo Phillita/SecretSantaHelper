@@ -17,10 +17,10 @@ class SecretSanta < ActiveRecord::Base
 
   before_create :default_email_and_file
 
-  friendly_id :name, use: [:slugged, :finders]
+  friendly_id :name, use: %i[slugged finders]
 
-  scope :by_email, ->(email) { joins(:user).where(User[:email].matches("%#{email}%")) unless email.blank? }
-  scope :by_name, ->(name) { where(SecretSanta[:name].matches("%#{name}%")) unless name.blank? }
+  scope :by_email, (->(email) { joins(:user).where(User[:email].matches("%#{email}%")) unless email.blank? })
+  scope :by_name, (->(name) { where(SecretSanta[:name].matches("%#{name}%")) unless name.blank? })
 
   def autosave_associated_records_for_user
     if user && new_user = User.find_by(email: user.email)
@@ -75,9 +75,21 @@ class SecretSanta < ActiveRecord::Base
     secret_santa_participants.collect do |participant|
       secret_santa_participants
         .joins(
-          ArelHelpers.join_association(SecretSantaParticipant, :secret_santa_participant_exceptions, Arel::Nodes::OuterJoin))
+          ArelHelpers.join_association(
+            SecretSantaParticipant,
+            :secret_santa_participant_exceptions,
+            Arel::Nodes::OuterJoin
+          )
+        )
+        .joins(
+          ArelHelpers.join_association(SecretSantaParticipant, :secret_santa_participant_match, Arel::Nodes::OuterJoin)
+        )
         .where(
           SecretSantaParticipant[:id].not_eq(participant.id)
+          .and(
+            SecretSantaParticipantMatch[:id].eq(nil)
+            .or(SecretSantaParticipantMatch[:test].eq(true))
+          )
           .and(
             SecretSantaParticipantException[:exception_id].not_eq(participant.id)
             .or(SecretSantaParticipantException[:id].eq(nil))

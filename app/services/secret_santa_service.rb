@@ -12,8 +12,8 @@ class SecretSantaService
   end
 
   def make_magic!
-    matches = find_matches(@secret_santa.to_h)
-    save_matches(matches)
+    reset
+    find_matches
     unless @secret_santa.test?
       print_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_file?
       mail_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_email?
@@ -29,59 +29,29 @@ class SecretSantaService
 
   private
 
-  def find_matches(santa_hsh)
-    used = []
-    id_arr = santa_hsh.keys
-    id_arr.shuffle.each do |id|
-      loop_count = 0
-      loop do
-        available_ids = santa_hsh.reject { |k, v| used.include?(k) || v[:exceptions].include?(id) || k == id }.keys
-        element_index = SecureRandom.random_number(available_ids.size)
-        raise SantaExceptions::InfiniteLoopError, "No one can be matched to #{santa_hsh[id][:name]}" if available_ids.empty?
-        secret_id = available_ids[element_index]
-
-        Rails.logger.info "Trying to match #{santa_hsh[id][:name]} (#{id}) with #{santa_hsh[secret_id][:name]} (#{secret_id}).\n"
-        Rails.logger.info "#{element_index}          #{available_ids}          #{used}"
-
-        if santa_hsh[id][:secret].nil? &&
-           !santa_hsh[id][:exceptions].include?(secret_id) &&
-           !used.include?(secret_id) &&
-           secret_id != id
-          santa_hsh[id][:secret] = { id: secret_id, name: santa_hsh[secret_id][:name] }
-          used << secret_id
-
-          Rails.logger.info "::Matched #{santa_hsh[id][:name]} with #{santa_hsh[id][:secret][:name]}."
-        end
-        loop_count += 1
-        Rails.logger.info "Loop Count: #{loop_count}\n\n"
-        break if santa_hsh[id].fetch(:secret, {}).fetch(:id, nil) == secret_id
-        raise SantaExceptions::InfiniteLoopError, 'Failed matching' if loop_count >= id_arr.size + MAX_LOOP
-      end
-    end
-    santa_hsh
-  rescue SantaExceptions::InfiniteLoopError
-    if @retry_count < 3
-      Rails.logger.warn "Hit infinite loop in matching:\n#{santa_hsh}\nRetrying (#{@retry_count})"
-      reset(santa_hsh)
-      retry
-    else
-      raise 'Hit infinite loop in matching too many times. Possibly due to complex exception matching.'
-    end
-  end
-
-  def reset(santa_hsh)
-    santa_hsh.each do |_k, v|
-      v.delete(:secret)
-    end
-  end
-
-  def save_matches(matches)
-    matches.each do |id, match|
-      secret_santa_participant_match = @secret_santa.secret_santa_participant_matches.where(secret_santa_participant_id: id).first_or_initialize
+  def find_matches
+    @secret_santa.secret_santa_participants.each do |participant|
+      exs = participant.secret_santa_participant_exceptions.pluck(:exception_id) << participant.id
+      match = @secret_santa.secret_santa_participants.where(SecretSantaParticipant[:id].not_in(exs)).sample
+      raise "No one can be matched to #{participant.name}" unless match
+      Rails.logger.info "\n::Matched #{participant.name} with #{match.name}.\n"
+      secret_santa_participant_match = @secret_santa.secret_santa_participant_matches.where(secret_santa_participant_id: participant.id).first_or_initialize
       secret_santa_participant_match.test = @secret_santa.test?
-      secret_santa_participant_match.match_id = match[:secret][:id]
-      secret_santa_participant_match.save
+      secret_santa_participant_match.match_id = match.id
+      secret_santa_participant_match.save!
     end
+  rescue SantaExceptions::InfiniteLoopError
+    raise 'Hit infinite loop in matching. Possibly due to complex exception matching.' if @retry_count > 3
+    reset
+    @retry_count += 1
+    retry
+  rescue => ex
+    Rails.logger.warn ex.message
+    raise
+  end
+
+  def reset
+    @secret_santa.secret_santa_participant_matches.destroy_all
   end
 
   def print_matches(matches, dir = Rails.root.join('tmp/secret_santa'))
@@ -105,7 +75,7 @@ class SecretSantaService
 
   def mail_matches(matches)
     matches.each do |match|
-      SecretSantaMailer.participant(match.secret_santa_participant_id, match.name, match[:file]).deliver
+      SecretSantaMailer.participant(match.secret_santa_participant_id, match.name, match[:file]).deliver_now
       sleep 1
     end
   end

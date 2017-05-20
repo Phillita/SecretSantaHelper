@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
   # validates :email, uniqueness: { case_sensitive: false }, unless: :guest?
   # validates :password, presence: true, length: { minimum: 6 }, unless: :guest?
 
-  scope :guests, -> { where.not(guest: nil) }
+  scope :guests, (-> { where.not(guest: nil) })
 
   def name
     "#{first_name} #{last_name}".strip
