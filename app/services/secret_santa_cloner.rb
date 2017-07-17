@@ -21,6 +21,7 @@ class SecretSantaCloner
 
   def clone_details
     @cloned_secret_santa.name = "Cloned: #{@secret_santa.name}"
+    @cloned_secret_santa.user.password = @secret_santa.user.password
     @cloned_secret_santa.last_run_on = nil
     @cloned_secret_santa.save!
   rescue => e

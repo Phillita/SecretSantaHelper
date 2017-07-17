@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe SecretSantaParticipant, type: :model do
   describe 'relationships' do
-    it { should have_many(:secret_santa_participant_exceptions) }
-    it { should have_many(:secret_santa_participant_exceptions_of) }
-    it { should have_one(:secret_santa_participant_match) }
+    it { is_expected.to have_many(:secret_santa_participant_exceptions) }
+    it { is_expected.to have_many(:secret_santa_participant_exceptions_of) }
+    it { is_expected.to have_one(:secret_santa_participant_match) }
   end
 
   describe 'to_h' do

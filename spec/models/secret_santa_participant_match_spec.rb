@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.describe SecretSantaParticipantMatch, type: :model do
   describe 'Relationships' do
-    it { should belong_to(:secret_santa_participant) }
-    it { should belong_to(:match) }
+    it { is_expected.to belong_to(:secret_santa_participant) }
+    it { is_expected.to belong_to(:match) }
   end
 
   describe 'delegates' do
-    it { should delegate_method(:name).to(:match) }
-    it { should delegate_method(:name).to(:secret_santa_participant).with_prefix(:giver) }
+    it { is_expected.to delegate_method(:name).to(:match) }
+    it { is_expected.to delegate_method(:name).to(:secret_santa_participant).with_prefix(:giver) }
   end
 
   describe 'success?' do

@@ -4,17 +4,17 @@ require 'rails_helper'
 
 RSpec.describe SecretSanta, type: :model do
   describe 'relationships' do
-    it { should belong_to(:user) }
-    it { should have_many(:secret_santa_participants) }
-    it { should have_many(:secret_santa_participant_matches).through(:secret_santa_participants) }
+    it { is_expected.to belong_to(:user) }
+    it { is_expected.to have_many(:secret_santa_participants) }
+    it { is_expected.to have_many(:secret_santa_participant_matches).through(:secret_santa_participants) }
   end
 
   describe 'validations' do
-    it { should validate_presence_of(:slug) }
+    it { is_expected.to validate_presence_of(:slug) }
   end
 
   describe 'delegates' do
-    it { should respond_to(:owner) }
+    it { is_expected.to respond_to(:owner) }
   end
 
   describe 'scopes' do
@@ -39,14 +39,13 @@ RSpec.describe SecretSanta, type: :model do
   context 'create' do
     describe 'autosave_associated_records_for_user' do
       it 'should use an existing user rather then creating a new one' do
-        u = FactoryGirl.create(:user, email: 'hulk@smash.ca')
-        ss = SecretSanta.create(slug: 'hulky', user_attributes: { first_name: 'The', last_name: 'Hulk', email: 'hulk@smash.ca' })
-
+        u = FactoryGirl.create(:user)
+        ss = SecretSanta.create(slug: 'HULKSMASH', user_attributes: { first_name: 'The', last_name: 'Hulk', email: u.email, guest: Time.now })
         expect(ss.user_id).to eq(u.id)
       end
 
       it "should create a new user if one doesn't exist" do
-        ss = SecretSanta.create(user_attributes: { first_name: 'The', last_name: 'Hulk', email: 'hulky@smash.ca' })
+        ss = SecretSanta.create(user_attributes: { first_name: 'The', last_name: 'Hulk', email: 'hulky@smash.ca', guest: Time.now })
 
         expect(ss.user.name).to eq('The Hulk')
         expect(ss.user.email).to eq('hulky@smash.ca')
