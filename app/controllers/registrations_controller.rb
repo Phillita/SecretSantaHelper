@@ -1,37 +1,21 @@
 # frozen_string_literal: true
 
 class RegistrationsController < Devise::RegistrationsController
-  def new
-    super
-  end
-
-  def create
-    # add custom create logic here
-    if User.exists?(email: creation_params[:email])
-      resource = User.find_by(email: creation_params[:email])
-      resource.update_attributes(creation_params.merge(guest: nil))
-
-      if resource.active_for_authentication?
-        set_flash_message! :notice, :signed_up
-        sign_up(resource_name, resource)
-        respond_with resource, location: after_sign_up_path_for(resource)
-      else
-        set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
-        expire_data_after_sign_in!
-        respond_with resource, location: after_inactive_sign_up_path_for(resource)
-      end
-    else
-      super
-    end
-  end
-
-  def update
-    super
-  end
+  prepend_after_action :send_confirmation_for_existing_user, only: :create
 
   private
 
-  def creation_params
-    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
+  # overriding the original build resource that devise uses so that I can find a user already in the database
+  # otherwise continue with the new user
+  def build_resource(hash = nil)
+    self.resource = resource_class.find_by(email: hash[:email]) if resource_class.exists?(email: hash[:email])
+    self.resource ||= resource_class.new_with_session(hash || {}, session)
+    self.resource.attributes = (hash || {}).merge(guest: nil)
+    self.resource = resource_class.new_with_session(hash || {}, session) unless resource.valid?
+  end
+
+  def send_confirmation_for_existing_user
+    return if resource.new_record? || !resource.valid? || resource.confirmed?
+    resource.send_confirmation_instructions
   end
 end

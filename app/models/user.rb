@@ -6,7 +6,9 @@ class User < ActiveRecord::Base
   VALID_PASSWORD_REGEX = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/
 
   # Include default devise modules. Others available are:
-  # :timeoutable, :omniauthable, :validatable
+  # :timeoutable, :omniauthable
+  # Removed due to manual validation
+  # :validatable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable,
          :lockable, :confirmable, stretches: 12
@@ -24,9 +26,11 @@ class User < ActiveRecord::Base
   validates :password, presence: true,
                        length: { minimum: 8 },
                        format: { with: VALID_PASSWORD_REGEX, message: 'Must have mixed case and at least one number.' },
-                       if: 'password_confirmation.present?',
+                       if: :password_required?,
                        unless: :guest?
-  validate :password_complexity
+  validate :password_complexity, if: :password_required?, unless: :guest?
+  validates_confirmation_of :password, if: :password_required?, unless: :guest?
+
 
   scope :guests, (-> { where.not(guest: nil) })
 
@@ -45,7 +49,11 @@ class User < ActiveRecord::Base
   end
 
   def password_complexity
-    return unless password.present? && !password.match(VALID_PASSWORD_REGEX)
+    return unless (password.present? || encrypted_password.blank?) && !password.to_s.match(VALID_PASSWORD_REGEX)
     errors.add :password, 'must have mixed case and at least one number.'
+  end
+
+  def password_required?
+    !persisted? || password.present? || password_confirmation.present?
   end
 end

@@ -14,6 +14,7 @@ class SecretSantaService
   def make_magic!
     reset
     find_matches
+    @secret_santa.reload
     unless @secret_santa.test?
       print_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_file?
       mail_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_email?
@@ -51,7 +52,8 @@ class SecretSantaService
   end
 
   def reset
-    @secret_santa.secret_santa_participant_matches.destroy_all
+    @secret_santa.secret_santa_participant_matches.each(&:destroy)
+    @secret_santa.reload
   end
 
   def print_matches(matches, dir = Rails.root.join('tmp/secret_santa'))

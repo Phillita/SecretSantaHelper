@@ -69,23 +69,28 @@
   </div>
 <% end unless secret_santa.ready? %>
 
-<div class="row secret-santa-participants">
-  <% secret_santa.secret_santa_participants.each do |participant| %>
-    <div class="col-lg-3">
-      <div class="participant panel panel-default">
-        <div class="panel-heading">
-          <%= content_tag :h3, participant.name %>
+  <% secret_santa.secret_santa_participants.in_groups_of(4).each do |group| %>
+  <div class="row secret-santa-participants">
+    <%
+      group.each do |participant|
+        next unless participant
+    %>
+      <div class="col-lg-3">
+        <div class="participant panel panel-default">
+          <div class="panel-heading">
+            <%= content_tag :h3, participant.name %>
+          </div>
+          <div class="panel-body">
+            <% exceptions = participant.secret_santa_participant_exceptions.any? %>
+            <p>Can buy for anyone<%= exceptions ? ' except:' : '!' %></p>
+          </div>
+          <%= content_tag :ul, class: 'list-group' do %>
+            <% participant.secret_santa_participant_exceptions.each do |exception| %>
+              <%= content_tag :li, exception.name, class: 'list-group-item' %>
+            <% end %>
+          <% end if exceptions %>
         </div>
-        <div class="panel-body">
-          <% exceptions = participant.secret_santa_participant_exceptions.any? %>
-          <p>Can buy for anyone<%= exceptions ? ' except:' : '!' %></p>
-        </div>
-        <%= content_tag :ul, class: 'list-group' do %>
-          <% participant.secret_santa_participant_exceptions.each do |exception| %>
-            <%= content_tag :li, exception.name, class: 'list-group-item' %>
-          <% end %>
-        <% end if exceptions %>
       </div>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
+<% end %>
