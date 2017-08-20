@@ -77,7 +77,11 @@ class SecretSantaController < ApplicationController
   def match
     @secret_santa = SecretSanta.find(params[:id])
     @secret_santa.update_attributes(secret_santa_params) if can_update?
-    @secret_santa.make_magic!
+    if @secret_santa.make_magic!
+      flash.now[:success] = 'Matching successful!'
+    else
+      flash.now[:error] = 'Failed to match all participants. Please retry.'
+    end
     respond_to do |format|
       format.html
     end

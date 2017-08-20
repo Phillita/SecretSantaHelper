@@ -8,7 +8,7 @@ class SecretSanta < ActiveRecord::Base
   belongs_to :user, autosave: true
   alias_attribute :owner, :user
   has_many :secret_santa_participants, as: :participantable, dependent: :destroy
-  has_many :secret_santa_participant_matches, through: :secret_santa_participants, dependent: :destroy
+  has_many :secret_santa_participant_matches, dependent: :destroy
 
   validates :slug, presence: true
 

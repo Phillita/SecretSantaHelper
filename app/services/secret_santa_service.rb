@@ -12,43 +12,59 @@ class SecretSantaService
   end
 
   def make_magic!
-    reset
-    find_matches
-    @secret_santa.reload
-    unless @secret_santa.test?
-      print_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_file?
-      mail_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_email?
-      cleanup_files(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_file?
-      @secret_santa.update_attribute(:last_run_on, Time.zone.now)
+    ActiveRecord::Base.transaction do
+      reset
+      create_matches
+      @secret_santa.reload
+      finishing_touches unless @secret_santa.test?
+      true
     end
-    true
   rescue => ex
-    Rails.logger.error ex.message
-    Rails.logger.error ex.backtrace.join("\n")
+    Rails.logger.error ex.message + "\n" + ex.backtrace.join("\n")
     false
   end
 
   private
 
-  def find_matches
+  def create_matches
     @secret_santa.secret_santa_participants.each do |participant|
-      exs = participant.secret_santa_participant_exceptions.pluck(:exception_id) << participant.id
-      match = @secret_santa.secret_santa_participants.where(SecretSantaParticipant[:id].not_in(exs)).sample
-      raise "No one can be matched to #{participant.name}" unless match
-      Rails.logger.info "\n::Matched #{participant.name} with #{match.name}.\n"
-      secret_santa_participant_match = @secret_santa.secret_santa_participant_matches.where(secret_santa_participant_id: participant.id).first_or_initialize
-      secret_santa_participant_match.test = @secret_santa.test?
-      secret_santa_participant_match.match_id = match.id
-      secret_santa_participant_match.save!
+      secret_santa_match = build_match(participant)
+      unless secret_santa_match.match
+        raise SantaExceptions::InfiniteLoopError, "No one can be matched to #{participant.name}"
+      end
+      secret_santa_match.save!
     end
   rescue SantaExceptions::InfiniteLoopError
     raise 'Hit infinite loop in matching. Possibly due to complex exception matching.' if @retry_count > 3
+    Rails.logger.info "\n::Failed to match all participants. Retrying (#{@retry_count += 1})...\n"
     reset
-    @retry_count += 1
     retry
-  rescue => ex
-    Rails.logger.warn ex.message
-    raise
+  end
+
+  def build_match(participant)
+    @secret_santa.secret_santa_participant_matches
+                 .build(
+                   test: @secret_santa.test?,
+                   match: find_match(participant),
+                   secret_santa_participant: participant
+                 )
+  end
+
+  def find_match(participant)
+    @secret_santa.secret_santa_participants
+                 .where(
+                   SecretSantaParticipant[:id].not_in(
+                     (exceptions(participant) + matched) << participant.id
+                   )
+                 ).sample
+  end
+
+  def exceptions(participant)
+    participant.secret_santa_participant_exceptions.pluck(:exception_id)
+  end
+
+  def matched
+    @secret_santa.secret_santa_participant_matches.pluck(:match_id)
   end
 
   def reset
@@ -56,23 +72,32 @@ class SecretSantaService
     @secret_santa.reload
   end
 
+  def finishing_touches
+    print_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_file?
+    mail_matches(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_email?
+    cleanup_files(@secret_santa.secret_santa_participant_matches) if @secret_santa.send_file?
+    @secret_santa.update_attribute(:last_run_on, Time.zone.now)
+  end
+
   def print_matches(matches, dir = Rails.root.join('tmp/secret_santa'))
     require 'fileutils'
-
     FileUtils.mkdir_p(dir) unless File.directory?(dir)
 
     matches.each do |match|
-      liquid_options = {
-        'Giver' => match.giver_name,
-        'Receiver' => match.name,
-        'SecretSanta' => @secret_santa.name
-      }
-      filename = parse_liquid(@secret_santa.filename, liquid_options)
-      file_content = parse_liquid(@secret_santa.file_content, liquid_options)
+      filename = parse_liquid(@secret_santa.filename, liquid_options(match))
+      file_content = parse_liquid(@secret_santa.file_content, liquid_options(match))
       filepath = "#{dir}/#{filename}.txt"
       File.open(filepath, 'w') { |file| file.write(file_content) }
       match.file = filepath
     end
+  end
+
+  def liquid_options(match)
+    {
+      'Giver' => match.giver_name,
+      'Receiver' => match.name,
+      'SecretSanta' => @secret_santa.name
+    }
   end
 
   def mail_matches(matches)

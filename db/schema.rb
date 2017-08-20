@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170312175258) do
+ActiveRecord::Schema.define(version: 20170814121239) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",           limit: 255, null: false
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20170312175258) do
   end
 
   create_table "secret_santa_participant_matches", force: :cascade do |t|
+    t.integer  "secret_santa_id",             limit: 4
     t.integer  "match_id",                    limit: 4
     t.integer  "secret_santa_participant_id", limit: 4
     t.boolean  "test"

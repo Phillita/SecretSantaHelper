@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe SecretSantaParticipantMatch, type: :model do
   describe 'Relationships' do
+    it { is_expected.to belong_to(:secret_santa) }
     it { is_expected.to belong_to(:secret_santa_participant) }
     it { is_expected.to belong_to(:match) }
   end

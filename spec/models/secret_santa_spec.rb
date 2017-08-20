@@ -6,7 +6,7 @@ RSpec.describe SecretSanta, type: :model do
   describe 'relationships' do
     it { is_expected.to belong_to(:user) }
     it { is_expected.to have_many(:secret_santa_participants) }
-    it { is_expected.to have_many(:secret_santa_participant_matches).through(:secret_santa_participants) }
+    it { is_expected.to have_many(:secret_santa_participant_matches) }
   end
 
   describe 'validations' do
