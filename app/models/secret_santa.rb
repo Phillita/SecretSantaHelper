@@ -1,6 +1,6 @@
 # frozen_string_literal: false
 
-class SecretSanta < ActiveRecord::Base
+class SecretSanta < ApplicationRecord
   include ArelHelpers::ArelTable
   extend FriendlyId
   self.table_name = 'secret_santas'

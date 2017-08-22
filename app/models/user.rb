@@ -1,6 +1,6 @@
 # frozen_string_literal: false
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include ArelHelpers::ArelTable
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   VALID_PASSWORD_REGEX = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/

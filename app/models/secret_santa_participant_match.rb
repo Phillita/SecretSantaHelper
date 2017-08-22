@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SecretSantaParticipantMatch < ActiveRecord::Base
+class SecretSantaParticipantMatch < ApplicationRecord
   include ArelHelpers::ArelTable
   attr_accessor :file
 

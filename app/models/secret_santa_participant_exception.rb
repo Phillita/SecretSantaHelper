@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SecretSantaParticipantException < ActiveRecord::Base
+class SecretSantaParticipantException < ApplicationRecord
   include ArelHelpers::ArelTable
 
   belongs_to :exception, class_name: 'SecretSantaParticipant'

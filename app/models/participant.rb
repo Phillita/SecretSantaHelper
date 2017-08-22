@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Participant < ActiveRecord::Base
+class Participant < ApplicationRecord
   include ArelHelpers::ArelTable
 
   belongs_to :participantable, polymorphic: true
