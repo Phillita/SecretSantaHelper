@@ -8,7 +8,7 @@ RSpec.describe SecretSantaCloner do
   describe 'attributes' do
     subject { SecretSantaCloner.new(secret_santa) }
 
-    it { should respond_to(:cloned_secret_santa) }
+    it { is_expected.to respond_to(:cloned_secret_santa) }
   end
 
   describe 'clone' do

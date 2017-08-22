@@ -8,8 +8,8 @@ RSpec.describe SecretSantaService do
   describe 'attributes' do
     subject { SecretSantaService.new(secret_santa) }
 
-    it { should respond_to(:secret_santa) }
-    it { should respond_to(:matches) }
+    it { is_expected.to respond_to(:secret_santa) }
+    it { is_expected.to respond_to(:matches) }
   end
 
   describe 'make_magic!' do
