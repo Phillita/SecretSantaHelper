@@ -45,7 +45,7 @@
             <label class="btn btn-primary btn-lg">
               <%= f.check_box :test_run, {}, secret_santa.test_run || Time.zone.now, '' %> Test
             </label>
-            <%= f.submit 'Make Magic!', class: 'btn btn-success btn-lg', disabled: !secret_santa.ready? %>
+            <%= f.submit 'Make Magic!', class: 'btn btn-success btn-lg', disabled: !secret_santa.ready?, data: { turbolinks: 'false' } %>
           </div>
         </div>
       <% end %>

@@ -21,11 +21,13 @@
   </div>
 
 
-  <div class="row">
-    <%= f.fields_for :secret_santa_participants do |secret_santa_participant| %>
-      <%= render 'secret_santa_participants/exception_fields', f: secret_santa_participant %>
-    <% end %>
-  </div>
+  <% f.object.secret_santa_participants.in_groups_of(3).each do |grp| %>
+    <div class="row">
+      <%= f.fields_for :secret_santa_participants, grp.compact do |secret_santa_participant| %>
+        <%= render 'secret_santa_participants/exception_fields', f: secret_santa_participant %>
+      <% end %>
+    </div>
+  <% end %>
 
   <%= render 'secret_santa/wizard/buttons', f: f, max_step: max_secret_santa_step, step: step %>
 <% end %>

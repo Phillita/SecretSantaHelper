@@ -83,7 +83,14 @@ class SecretSantaController < ApplicationController
       flash.now[:error] = 'Failed to match all participants. Please retry.'
     end
     respond_to do |format|
-      format.html
+      if @secret_santa.make_magic!
+        flash.now[:success] = 'Matching successful!'
+        format.html
+      else
+        flash.now[:error] =
+          "Failed to match all participants. It's possible that not all participants can be matched. Please try again."
+        format.html { render :show }
+      end
     end
   end
 
@@ -202,7 +209,7 @@ class SecretSantaController < ApplicationController
       user_attributes: %i[id first_name last_name email guest],
       secret_santa_participants_attributes: [:id,
                                              :_destroy,
-                                             user_attributes: %i[first_name last_name email guest],
+                                             user_attributes: %i[id first_name last_name email guest],
                                              secret_santa_participant_exceptions_attributes: %i[id exception_id _destroy]]
     )
   end

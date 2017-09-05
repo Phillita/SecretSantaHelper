@@ -15,7 +15,7 @@
     <div class="btn-group text-center" role="group" aria-label="actions">
       <%= link_to 'Back', secret_santum_path(secret_santa), class: 'btn btn-default btn-lg' %>
       <%= link_to 'Edit', edit_secret_santum_path(secret_santa), class: 'btn btn-default btn-lg' %>
-      <%= link_to 'Rerun', match_secret_santum_path(secret_santa),  class: 'btn btn-default btn-lg' %>
+      <%= link_to 'Rerun', match_secret_santum_path(secret_santa),  class: 'btn btn-default btn-lg', data: { turbolinks: 'false' } %>
     </div>
   </div>
 </div>

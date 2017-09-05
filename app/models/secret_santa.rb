@@ -5,7 +5,7 @@ class SecretSanta < ApplicationRecord
   extend FriendlyId
   self.table_name = 'secret_santas'
 
-  belongs_to :user, autosave: true
+  belongs_to :user, autosave: true, inverse_of: :secret_santas
   alias_attribute :owner, :user
   has_many :secret_santa_participants, as: :participantable, dependent: :destroy
   has_many :secret_santa_participant_matches, dependent: :destroy
@@ -23,12 +23,19 @@ class SecretSanta < ApplicationRecord
   scope :by_name, (->(name) { where(SecretSanta[:name].matches("%#{name}%")) unless name.blank? })
 
   def autosave_associated_records_for_user
-    if user && !user.persisted? && new_user = User.find_by(email: user.email)
+    if user && !user.persisted? && User.exists?(email: user.email)
+      new_user = User.find_by(email: user.email)
+      new_user.update_attributes(user.slice(:first_name, :last_name))
       self.user = new_user
     elsif user
       user.save!
       self.user = user
     end
+  end
+
+  def user_attributes=(attributes)
+    self.user = User.find(attributes['id']) if attributes['id'].present?
+    super
   end
 
   # either the user said this is a test or has selected to not have a file or email sent

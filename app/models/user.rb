@@ -13,7 +13,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable,
          :lockable, :confirmable, stretches: 12
 
-  has_many :secret_santas
+  has_many :secret_santas, inverse_of: :user
+  has_many :secret_santa_participants, inverse_of: :user
 
   before_save { self.email = email.downcase }
 
@@ -30,7 +31,6 @@ class User < ApplicationRecord
                        unless: :guest?
   validate :password_complexity, if: :password_required?, unless: :guest?
   validates_confirmation_of :password, if: :password_required?, unless: :guest?
-
 
   scope :guests, (-> { where.not(guest: nil) })
 
