@@ -67,7 +67,7 @@
       <p>Not all participants in this secret santa can be matched with another person. Please make sure the setting are updated in order to run the matching process.</p>
     </div>
   </div>
-<% end unless secret_santa.ready? %>
+<% end unless secret_santa.complete? || secret_santa.ready? %>
 
   <% secret_santa.secret_santa_participants.in_groups_of(4).each do |group| %>
   <div class="row secret-santa-participants">
