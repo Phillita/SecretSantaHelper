@@ -77,11 +77,6 @@ class SecretSantaController < ApplicationController
   def match
     @secret_santa = SecretSanta.find(params[:id])
     @secret_santa.update_attributes(secret_santa_params) if can_update?
-    if @secret_santa.make_magic!
-      flash.now[:success] = 'Matching successful!'
-    else
-      flash.now[:error] = 'Failed to match all participants. Please retry.'
-    end
     respond_to do |format|
       if @secret_santa.make_magic!
         flash.now[:success] = 'Matching successful!'
@@ -162,7 +157,7 @@ class SecretSantaController < ApplicationController
 
     case @step
     when 1
-      secret_santa.build_user(current_user.attributes) if current_user
+      secret_santa.user = current_user if current_user
       secret_santa.build_user(guest: Time.zone.now) unless secret_santa.user
     when 2
       secret_santa.secret_santa_participants.where(user_id: secret_santa.user_id).first_or_initialize

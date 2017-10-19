@@ -14,7 +14,7 @@ class Participant < ApplicationRecord
 
   def autosave_associated_records_for_user
     return if user.nil?
-    if user && !user.persisted? && User.exists?(email: user.email)
+    if !user&.persisted? && User.exists?(email: user.email)
       new_user = User.find_by(email: user.email)
       new_user.update_attributes(user.slice(:first_name, :last_name))
       self.user = new_user

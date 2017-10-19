@@ -103,7 +103,8 @@ class SecretSantaService
   def mail_matches(matches)
     matches.each do |match|
       SecretSantaMailer.participant(match.secret_santa_participant_id, match.name, match[:file]).deliver_now
-      sleep 1
+      # Sleep will be needed later in order to not flood email servers too quickly
+      # sleep 1
     end
   end
 

@@ -6,6 +6,7 @@ FactoryGirl.define do
     sequence(:last_name) { |n| "LastName#{n}" }
     sequence(:email) { |n| "email_#{n}@example.com" }
     password 'Passw0rd1'
+    password_confirmation 'Passw0rd1'
 
     trait :guest do
       guest Time.now

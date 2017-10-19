@@ -25,7 +25,8 @@
       <p>
         <%= link_to_add_association '+', f, :secret_santa_participants,
                                     partial: 'secret_santa_participants/secret_santa_participant_fields', class: 'btn btn-success',
-                                    data: { association_insertion_method: :after, association_insertion_node: '#secret_santa_participants' } %>
+                                    data: { association_insertion_method: :after, association_insertion_node: '#secret_santa_participants' },
+                                    id: 'top-link-to-add-participant' %>
       </p>
     </div>
   </div>
@@ -43,7 +44,8 @@
       <p>
         <%= link_to_add_association '+', f, :secret_santa_participants,
                                     partial: 'secret_santa_participants/secret_santa_participant_fields', class: 'btn btn-success',
-                                    data: { association_insertion_method: :after, association_insertion_node: '#secret_santa_participants' } %>
+                                    data: { association_insertion_method: :after, association_insertion_node: '#secret_santa_participants' },
+                                    id: 'bottom-link-to-add-participant' %>
       </p>
     </div>
   </div>

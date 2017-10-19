@@ -44,9 +44,22 @@ class User < ApplicationRecord
 
   private
 
+  # devise overrides ================
   def confirmation_required?
-    !guest?
+    return false if guest?
+    super
   end
+
+  def confirmation_required?
+    return false if guest?
+    super
+  end
+
+  def postpone_email_change?
+    return false if guest?
+    super
+  end
+  # devise overrides ================
 
   def password_complexity
     return unless (password.present? || encrypted_password.blank?) && !password.to_s.match(VALID_PASSWORD_REGEX)

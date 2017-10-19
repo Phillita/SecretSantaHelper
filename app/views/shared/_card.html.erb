@@ -7,6 +7,6 @@
   <div class="card-block">
     <%= content_tag :h4, title, class: 'card-title' %>
     <%= content_tag :p, description, class: 'card-text' %>
-    <%= link_to lnk[:name], lnk[:path], class: lnk.fetch(:styles, []).join(' ') if lnk %>
+    <%= link_to lnk[:name], lnk[:path], class: lnk.fetch(:styles, []).join(' '), id: lnk.fetch(:id, lnk[:name]).parameterize if lnk %>
   </div>
 </div>

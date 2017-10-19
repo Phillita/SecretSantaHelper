@@ -11,7 +11,7 @@
     <div class="col-lg-4">
       <div class="secret-santa-name">
         <%= content_tag :h1 do %>
-        <%= secret_santa.name %> <small><%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), edit_secret_santum_path(secret_santa) unless secret_santa.complete? %> <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-trash'), secret_santum_path(secret_santa), method: :delete unless secret_santa.complete? %></small>
+        <%= secret_santa.name %> <small><%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), edit_secret_santum_path(secret_santa), id: 'edit-secret-santa' unless secret_santa.complete? %> <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-trash'), secret_santum_path(secret_santa), method: :delete unless secret_santa.complete? %></small>
         <% end %>
       </div>
     </div>

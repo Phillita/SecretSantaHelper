@@ -8,6 +8,8 @@ require File.expand_path('../../config/environment', __FILE__)
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 require 'simplecov'
+require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 
 SimpleCov.start
 
@@ -51,6 +53,60 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Warden::Test::Helpers
+
+  Capybara.javascript_driver = :webkit
+
+  Capybara::Webkit.configure do |webkit_config|
+    # Enable debug mode. Prints a log of everything the driver is doing.
+    webkit_config.debug = false
+
+    # By default, requests to outside domains (anything besides localhost) will
+    # result in a warning. Several methods allow you to change this behavior.
+
+    # Silently return an empty 200 response for any requests to unknown URLs.
+    # webkit_config.block_unknown_urls
+
+    # Allow pages to make requests to any URL without issuing a warning.
+    # webkit_config.allow_unknown_urls
+
+    # Allow a specific domain without issuing a warning.
+    # webkit_config.allow_url("example.com")
+
+    # Allow a specific URL and path without issuing a warning.
+    # webkit_config.allow_url("example.com/some/path")
+
+    # Wildcards are allowed in URL expressions.
+    # webkit_config.allow_url("*.example.com")
+
+    # Silently return an empty 200 response for any requests to the given URL.
+    # webkit_config.block_url("example.com")
+
+    # Timeout if requests take longer than 5 seconds
+    webkit_config.timeout = 5
+
+    # Don't raise errors when SSL certificates can't be validated
+    webkit_config.ignore_ssl_errors
+
+    # Don't load images
+    webkit_config.skip_image_loading
+
+    # Use a proxy
+    # webkit_config.use_proxy(
+    #   host: "example.com",
+    #   port: 1234,
+    #   user: "proxy",
+    #   pass: "secret"
+    # )
+
+    # Raise JavaScript errors as exceptions
+    webkit_config.raise_javascript_errors = true
+  end
+
+  Capybara::Screenshot.register_filename_prefix_formatter(:rspec) do |example|
+    "screenshot_#{example.description.gsub(' ', '-').gsub(/^.*\/spec\//,'')}"
+  end
+  Capybara::Screenshot.prune_strategy = :keep_last_run
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
