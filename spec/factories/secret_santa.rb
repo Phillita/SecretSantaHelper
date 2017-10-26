@@ -23,19 +23,25 @@ FactoryGirl.define do
     end
 
     trait :test_on do
-      test_run Time.zone.now
+      test_run DateTime.current
     end
 
     trait :secure do
       passphrase 'Test'
     end
 
-    trait :complete do
-      last_run_on Time.zone.now
+    trait :completed do
+      last_run_on DateTime.current - 2.days
+      exchange_date DateTime.current - 1.day
+    end
+
+    trait :started do
+      last_run_on DateTime.current
     end
 
     factory :secret_santa_test, traits: [:test_on]
-    factory :secret_santa_complete, traits: [:complete]
+    factory :secret_santa_completed, traits: [:completed]
+    factory :secret_santa_started, traits: [:started]
     factory :secret_santa_secure, traits: [:secure]
     factory :secret_santa_with_email, traits: [:send_an_email]
     factory :secret_santa_with_file, traits: [:send_a_file]

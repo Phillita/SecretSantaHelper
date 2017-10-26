@@ -40,9 +40,11 @@ gem 'devise'
 gem 'arel-helpers', '~> 2.3'
 gem 'cancancan', '~> 2.0'
 gem 'cocoon', '~> 1.2', '>= 1.2.10'
+gem 'datetime_picker_rails', '~> 0.0.7'
 gem 'friendly_id', '~> 5.2'
 gem 'jquery-turbolinks', '~> 2.1'
 gem 'liquid', '~> 4.0'
+gem 'momentjs-rails'
 gem 'simple_form'
 gem 'trix', '~> 0.11.0'
 
@@ -62,6 +64,7 @@ group :test do
   gem 'fivemat'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
+  gem 'selenium-webdriver'
 end
 
 group :development, :test do

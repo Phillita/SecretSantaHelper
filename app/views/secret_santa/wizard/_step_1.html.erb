@@ -17,17 +17,21 @@
     <div class="col-lg-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h4>What would you like to call it?</h4>
+          <h4>What would you like to call it &amp; When is it hapenning?</h4>
         </div>
         <div class="panel-body">
           <div id="secret_santa_name">
             <%= f.input :name, autofocus: true, label_html: { class: 'hidden' }, placeholder: 'Name' %>
           </div>
+          <div id="secret_santa_exchange_date">
+            <%= f.input :exchange_date, as: :date_time_picker, label_html: { class: 'hidden' }, placeholder: 'Exchange Date' %>
+          </div>
         </div>
         <div class="panel-footer">
           <h5>Why?</h5>
-          <p>This will help you remember this Secret Santa.</p>
+          <p>The name will help you remember this Secret Santa.</p>
           <p>Emails sent to your participants will have this title in it.</p>
+          <p>Results will be displayed after the exchange date has been passed.</p>
         </div>
       </div>
     </div>

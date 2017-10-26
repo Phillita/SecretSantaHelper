@@ -17,10 +17,11 @@ RSpec.feature 'Creating a Secret Santa', js: true do
       expect(page).to have_content(:li, 'Any Exceptions?')
       expect(page).to have_content(:h2, 'First Steps')
 
-      expect(page).to have_content(:h4, 'What would you like to call it?')
+      expect(page).to have_content(:h4, 'What would you like to call it & When is it hapenning?')
       expect(page).to have_content(:h5, 'Why?', count: 2)
-      expect(page).to have_content(:p, 'This will help you remember this Secret Santa.')
+      expect(page).to have_content(:p, 'The name will help you remember this Secret Santa.')
       expect(page).to have_content(:p, 'Emails sent to your participants will have this title in it.')
+      expect(page).to have_content(:p, 'Results will be displayed after the exchange date has been passed.')
 
       expect(page).to have_content(:h4, 'Who are you?')
 
@@ -151,10 +152,11 @@ RSpec.feature 'Creating a Secret Santa', js: true do
       expect(page).to have_content(:li, 'Any Exceptions?')
       expect(page).to have_content(:h2, 'First Steps')
 
-      expect(page).to have_content(:h4, 'What would you like to call it?')
+      expect(page).to have_content(:h4, 'What would you like to call it & When is it hapenning?')
       expect(page).to have_content(:h5, 'Why?', count: 2)
-      expect(page).to have_content(:p, 'This will help you remember this Secret Santa.')
+      expect(page).to have_content(:p, 'The name will help you remember this Secret Santa.')
       expect(page).to have_content(:p, 'Emails sent to your participants will have this title in it.')
+      expect(page).to have_content(:p, 'Results will be displayed after the exchange date has been passed.')
 
       expect(page).to have_content(:h4, 'Who are you?')
 
@@ -295,10 +297,11 @@ RSpec.feature 'Creating a Secret Santa', js: true do
       expect(page).to have_content(:li, 'Any Exceptions?')
       expect(page).to have_content(:h2, 'First Steps')
 
-      expect(page).to have_content(:h4, 'What would you like to call it?')
+      expect(page).to have_content(:h4, 'What would you like to call it & When is it hapenning?')
       expect(page).to have_content(:h5, 'Why?', count: 2)
-      expect(page).to have_content(:p, 'This will help you remember this Secret Santa.')
+      expect(page).to have_content(:p, 'The name will help you remember this Secret Santa.')
       expect(page).to have_content(:p, 'Emails sent to your participants will have this title in it.')
+      expect(page).to have_content(:p, 'Results will be displayed after the exchange date has been passed.')
 
       expect(page).to have_content(:h4, 'Who are you?')
 
@@ -308,7 +311,7 @@ RSpec.feature 'Creating a Secret Santa', js: true do
       expect(page).to have_content(:li, 'Minimum of 6 characters.')
       expect(page).to have_content(:li, 'Use letters numbers and symbols.')
       expect(page).to have_content(:li, "Make sure it's memerable!")
-      
+
       expect(page).to have_selector("input[value='Captain']")
       expect(page).to have_selector("input[value='America']")
       expect(page).to have_selector("input[value='camerica@avengers.com']")
@@ -402,7 +405,7 @@ RSpec.feature 'Creating a Secret Santa', js: true do
       expect(created_secret_santa.secret_santa_participants.count).to eq(3)
       expect(created_secret_santa.secret_santa_participants.second.secret_santa_participant_exceptions.count).to eq(1)
     end
-  
+
     scenario 'from the new page' do
       visit new_secret_santum_path
 
@@ -412,10 +415,11 @@ RSpec.feature 'Creating a Secret Santa', js: true do
       expect(page).to have_content(:li, 'Any Exceptions?')
       expect(page).to have_content(:h2, 'First Steps')
 
-      expect(page).to have_content(:h4, 'What would you like to call it?')
+      expect(page).to have_content(:h4, 'What would you like to call it & When is it hapenning?')
       expect(page).to have_content(:h5, 'Why?', count: 2)
-      expect(page).to have_content(:p, 'This will help you remember this Secret Santa.')
+      expect(page).to have_content(:p, 'The name will help you remember this Secret Santa.')
       expect(page).to have_content(:p, 'Emails sent to your participants will have this title in it.')
+      expect(page).to have_content(:p, 'Results will be displayed after the exchange date has been passed.')
 
       expect(page).to have_content(:h4, 'Who are you?')
 
@@ -425,7 +429,7 @@ RSpec.feature 'Creating a Secret Santa', js: true do
       expect(page).to have_content(:li, 'Minimum of 6 characters.')
       expect(page).to have_content(:li, 'Use letters numbers and symbols.')
       expect(page).to have_content(:li, "Make sure it's memerable!")
-      
+
       expect(page).to have_selector("input[value='Captain']")
       expect(page).to have_selector("input[value='America']")
       expect(page).to have_selector("input[value='camerica@avengers.com']")

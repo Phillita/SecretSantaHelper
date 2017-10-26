@@ -68,8 +68,11 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
         .to receive(:participant).with(secret_santa_participant3.id, a_kind_of(String), nil).and_call_original
       allow(Kernel).to receive(:sleep).with(1).and_return(true)
       visit secret_santum_path(secret_santa)
-      click_button 'Make Magic!'
+      expect { click_button 'Make Magic!' }.to change { secret_santa.reload.started? }.to(true)
       expect(page).to have_content('Matching successful!')
+
+      visit secret_santum_path(secret_santa)
+      expect(page).to have_content("This Secret Santa was started on #{secret_santa.reload.last_run_on}")
     end
   end
 
@@ -125,8 +128,11 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
         .to receive(:participant).with(secret_santa_participant3.id, a_kind_of(String), nil).and_call_original
       allow(Kernel).to receive(:sleep).with(1).and_return(true)
       visit secret_santum_path(secret_santa)
-      click_button 'Make Magic!'
+      expect { click_button 'Make Magic!' }.to change { secret_santa.reload.started? }.to(true)
       expect(page).to have_content('Matching successful!')
+
+      visit secret_santum_path(secret_santa)
+      expect(page).to have_content("This Secret Santa was started on #{secret_santa.reload.last_run_on}")
     end
   end
 end

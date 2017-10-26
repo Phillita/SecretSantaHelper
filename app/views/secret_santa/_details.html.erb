@@ -11,15 +11,27 @@
     <div class="col-lg-4">
       <div class="secret-santa-name">
         <%= content_tag :h1 do %>
-        <%= secret_santa.name %> <small><%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), edit_secret_santum_path(secret_santa), id: 'edit-secret-santa' unless secret_santa.complete? %> <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-trash'), secret_santum_path(secret_santa), method: :delete unless secret_santa.complete? %></small>
+        <%= secret_santa.name %> <small><%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), edit_secret_santum_path(secret_santa), id: 'edit-secret-santa' unless secret_santa.started? %> <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-trash'), secret_santum_path(secret_santa), method: :delete unless secret_santa.started? %></small>
         <% end %>
       </div>
     </div>
 
-    <% if secret_santa.complete? %>
+    <% if secret_santa.completed? %>
       <div class="col-lg-4 text-center">
         <div class="alert alert-success top-10">
-          <p>This Secret Santa was last run on <strong><%= secret_santa.last_run_on %></strong>.</p>
+          <p>This Secret Santa was completed on <strong><%= secret_santa.exchange_date %></strong>.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 text-center">
+        <div class="btn-group top-10">
+          <%= link_to 'Create New Secret Santa', new_secret_santum_path, class: 'btn btn-primary btn-lg' %>
+          <%= link_to 'Clone This Sectret Santa', clone_secret_santum_path(secret_santa), class: 'btn btn-info btn-lg' %>
+        </div>
+      </div>
+    <% elsif secret_santa.started? %>
+      <div class="col-lg-4 text-center">
+        <div class="alert alert-info top-10">
+          <p>This Secret Santa was started on <strong><%= secret_santa.last_run_on %></strong>.</p>
         </div>
       </div>
       <div class="col-lg-4 text-center">
@@ -67,7 +79,7 @@
       <p>Not all participants in this secret santa can be matched with another person. Please make sure the setting are updated in order to run the matching process.</p>
     </div>
   </div>
-<% end unless secret_santa.complete? || secret_santa.ready? %>
+<% end unless secret_santa.started? || secret_santa.ready? %>
 
   <% secret_santa.secret_santa_participants.in_groups_of(4).each do |group| %>
   <div class="row secret-santa-participants">
@@ -82,13 +94,16 @@
           </div>
           <div class="panel-body">
             <% exceptions = participant.secret_santa_participant_exceptions.any? %>
-            <p>Can buy for anyone<%= exceptions ? ' except:' : '!' %></p>
+            <span>Can buy for anyone<%= exceptions ? ' except:' : '!' %></span>
           </div>
           <%= content_tag :ul, class: 'list-group' do %>
             <% participant.secret_santa_participant_exceptions.each do |exception| %>
-              <%= content_tag :li, exception.name, class: 'list-group-item' %>
+              <%= content_tag :li, exception.name, class: 'list-group-item text-danger' %>
             <% end %>
           <% end if exceptions %>
+          <%= content_tag :div, class: 'panel-footer' do %>
+            <p>Gave to: <%= content_tag :span, participant.secret_santa_participant_match.name, class: 'text-success' %></p>
+          <% end if secret_santa.completed? %>
         </div>
       </div>
     <% end %>

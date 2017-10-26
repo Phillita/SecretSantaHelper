@@ -51,7 +51,11 @@ class SecretSanta < ApplicationRecord
     secret_santa_participants.any? && participants_can_all_be_matched?
   end
 
-  def complete?
+  def completed?
+    started? && exchange_date.present? && exchange_date < DateTime.current
+  end
+
+  def started?
     last_run_on.present?
   end
 

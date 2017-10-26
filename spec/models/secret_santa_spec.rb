@@ -100,13 +100,31 @@ RSpec.describe SecretSanta, type: :model do
     end
   end
 
-  describe 'complete?' do
+  describe 'started?' do
     it 'should return true if there is a last_run_on date' do
-      expect(FactoryGirl.build_stubbed(:secret_santa_complete).complete?).to be_truthy
+      expect(FactoryGirl.build_stubbed(:secret_santa_started).started?).to be_truthy
     end
 
-    it 'should return fasle if the secret santa has not run' do
-      expect(FactoryGirl.build_stubbed(:secret_santa).complete?).to be_falsey
+    it 'should return false if the secret santa has not run' do
+      expect(FactoryGirl.build_stubbed(:secret_santa).started?).to be_falsey
+    end
+  end
+
+  describe 'completed?' do
+    it 'should return true if there is an exchange date in the passed' do
+      expect(FactoryGirl.build_stubbed(:secret_santa_completed).completed?).to be_truthy
+    end
+
+    it 'should return false if the exchange date is nil' do
+      expect(FactoryGirl.build_stubbed(:secret_santa).completed?).to be_falsey
+    end
+
+    it 'should return false if the secret santa has not started but there is a date for the exchange in the passed' do
+      expect(FactoryGirl.build_stubbed(:secret_santa, exchange_date: DateTime.current - 1.day).completed?).to be_falsey
+    end
+
+    it 'should return false if the exchange date is in the future' do
+      expect(FactoryGirl.build_stubbed(:secret_santa).completed?).to be_falsey
     end
   end
 

@@ -135,7 +135,7 @@ class SecretSantaController < ApplicationController
     secret_santa = SecretSanta.find(params[:id])
 
     respond_to do |format|
-      if secret_santa.complete?
+      if secret_santa.started?
         flash[:error] = 'Secret Santa could not be deleted since it has been completed.'
         format.html { redirect_to secret_santum_path(secret_santa) }
       else
@@ -193,6 +193,7 @@ class SecretSantaController < ApplicationController
   def secret_santa_params
     params.require(:secret_santa).permit(
       :name,
+      :exchange_date,
       :send_email,
       :email_subject,
       :email_content,

@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,92 +10,90 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170814121239) do
+ActiveRecord::Schema.define(version: 20171026001041) do
 
-  create_table "friendly_id_slugs", force: :cascade do |t|
-    t.string   "slug",           limit: 255, null: false
-    t.integer  "sluggable_id",   limit: 4,   null: false
-    t.string   "sluggable_type", limit: 50
-    t.string   "scope",          limit: 255
+  create_table "friendly_id_slugs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
     t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, length: { slug: 70, scope: 70 }
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", length: { slug: 140 }
+    t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
+    t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
   end
 
-  add_index "friendly_id_slugs", ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, length: {"slug"=>70, "sluggable_type"=>nil, "scope"=>70}, using: :btree
-  add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", length: {"slug"=>140, "sluggable_type"=>nil}, using: :btree
-  add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
-  add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
-
-  create_table "participants", force: :cascade do |t|
-    t.string   "participantable_type", limit: 255
-    t.integer  "participantable_id",   limit: 4
-    t.integer  "user_id",              limit: 4
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+  create_table "participants", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "participantable_type"
+    t.integer "participantable_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "secret_santa_participant_exceptions", force: :cascade do |t|
-    t.integer  "exception_id",                limit: 4
-    t.integer  "secret_santa_participant_id", limit: 4
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+  create_table "secret_santa_participant_exceptions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.integer "exception_id"
+    t.integer "secret_santa_participant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "secret_santa_participant_matches", force: :cascade do |t|
-    t.integer  "secret_santa_id",             limit: 4
-    t.integer  "match_id",                    limit: 4
-    t.integer  "secret_santa_participant_id", limit: 4
-    t.boolean  "test"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+  create_table "secret_santa_participant_matches", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.integer "secret_santa_id"
+    t.integer "match_id"
+    t.integer "secret_santa_participant_id"
+    t.boolean "test"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "secret_santas", force: :cascade do |t|
-    t.integer  "user_id",       limit: 4
-    t.string   "name",          limit: 255
-    t.string   "slug",          limit: 255
-    t.boolean  "send_file",                   default: false
-    t.string   "filename",      limit: 255
-    t.text     "file_content",  limit: 65535
-    t.boolean  "send_email",                  default: true
-    t.text     "email_content", limit: 65535
-    t.string   "email_subject", limit: 255
+  create_table "secret_santas", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.integer "user_id"
+    t.string "name"
+    t.string "slug"
+    t.boolean "send_file", default: false
+    t.string "filename"
+    t.text "file_content"
+    t.boolean "send_email", default: true
+    t.text "email_content"
+    t.string "email_subject"
     t.datetime "test_run"
     t.datetime "last_run_on"
-    t.string   "passphrase",    limit: 255
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.string "passphrase"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "exchange_date"
+    t.index ["slug"], name: "index_secret_santas_on_slug", unique: true
   end
 
-  add_index "secret_santas", ["slug"], name: "index_secret_santas_on_slug", unique: true, using: :btree
-
-  create_table "users", force: :cascade do |t|
-    t.string   "first_name",             limit: 255
-    t.string   "last_name",              limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.string   "reset_password_token",   limit: 255
+  create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.string   "confirmation_token",     limit: 255
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email",      limit: 255
-    t.integer  "failed_attempts",        limit: 4,   default: 0,  null: false
-    t.string   "unlock_token",           limit: 255
+    t.string "unconfirmed_email"
+    t.integer "failed_attempts", default: 0, null: false
+    t.string "unlock_token"
     t.datetime "locked_at"
     t.datetime "guest"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
-
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
 end

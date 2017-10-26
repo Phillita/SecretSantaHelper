@@ -55,6 +55,21 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Warden::Test::Helpers
 
+  # headless chrome support
+  # Capybara.register_driver :chrome do |app|
+  #   Capybara::Selenium::Driver.new(app, browser: :chrome)
+  # end
+  #
+  # Capybara.register_driver :headless_chrome do |app|
+  #   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+  #     chromeOptions: { args: %w(headless disable-gpu) }
+  #   )
+  #
+  #   Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
+  # end
+
+  # Capybara.javascript_driver = :headless_chrome
+
   Capybara.javascript_driver = :webkit
 
   Capybara::Webkit.configure do |webkit_config|
@@ -102,6 +117,14 @@ RSpec.configure do |config|
     # Raise JavaScript errors as exceptions
     webkit_config.raise_javascript_errors = true
   end
+
+  # headless chrome support
+  # Capybara::Screenshot.register_driver(:chrome) do |driver, path|
+  #   driver.browser.save_screenshot(path)
+  # end
+  # Capybara::Screenshot.register_driver(:headless_chrome) do |driver, path|
+  #   driver.browser.save_screenshot(path)
+  # end
 
   Capybara::Screenshot.register_filename_prefix_formatter(:rspec) do |example|
     "screenshot_#{example.description.gsub(' ', '-').gsub(/^.*\/spec\//,'')}"

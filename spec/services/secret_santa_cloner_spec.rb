@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe SecretSantaCloner do
-  let(:secret_santa) { FactoryGirl.create(:secret_santa_complete) }
+  let(:secret_santa) { FactoryGirl.create(:secret_santa_started) }
 
   describe 'attributes' do
     subject { SecretSantaCloner.new(secret_santa) }
