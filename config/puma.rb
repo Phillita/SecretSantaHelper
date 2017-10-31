@@ -6,16 +6,17 @@
 # the maximum value specified for Puma. Default is set to 5 threads for minimum
 # and maximum, this matches the default thread size of Active Record.
 #
-puma_threads ||= ENV.fetch('puma_threads') || [5, 5]
+puma_threads ||= ENV.fetch('puma_threads', [1, 6])
 threads puma_threads.first, puma_threads.last
 
 # Specifies the `port` that Puma will listen on to receive requests, default is 3000.
 #
-port ENV.fetch('PORT') { 3000 }
+puma_port ||= ENV.fetch('PORT', 3000)
+port puma_port
 
 # Specifies the `environment` that Puma will run in.
 #
-rails_env ||= ENV.fetch('rails_env') || 'development'
+rails_env ||= ENV.fetch('RAILS_ENV', 'production')
 environment rails_env
 
 # Specifies the number of `workers` to boot in clustered mode.
