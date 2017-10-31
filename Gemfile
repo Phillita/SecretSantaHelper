@@ -49,22 +49,33 @@ gem 'simple_form'
 gem 'trix', '~> 0.11.0'
 
 group :development do
-  gem 'letter_opener'
   gem 'guard'
   gem 'guard-rspec', require: false
   gem 'guard-spring'
+  gem 'letter_opener'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 3.5', '>= 3.5.1'
+
+  gem 'capistrano', '~> 3.4.0'
+  gem 'capistrano-bundler', '~> 1.1.2'
+  gem 'capistrano-rails', '~> 1.1.1'
+  gem 'capistrano-rails-console'
+  gem 'capistrano-rbenv', '~> 2.0'
+  gem 'capistrano-rbenv-install', '~> 1.2.0'
+  gem 'capistrano-safe-deploy-to', '~> 1.1.1'
+  # gem 'capistrano-sidekiq'
+  gem 'capistrano-unicorn-nginx', '~> 3.2.0'
+  gem 'capistrano-upload-config', '~> 0.6.0'
 end
 
 group :test do
   gem 'capybara'
-  gem 'capybara-webkit'
   gem 'capybara-screenshot'
+  gem 'capybara-webkit'
   gem 'fivemat'
+  gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
-  gem 'selenium-webdriver'
 end
 
 group :development, :test do

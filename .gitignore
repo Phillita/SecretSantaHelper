@@ -16,6 +16,8 @@
 !/log/.keep
 /tmp
 config/secrets.yml
+config/secrets.*.yml
 config/database.yml
+config/database.*.yml
 .byebug_history
 /coverage/*
