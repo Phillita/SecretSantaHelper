@@ -64,8 +64,10 @@ group :development do
   gem 'capistrano-rbenv-install', '~> 1.2.0'
   gem 'capistrano-safe-deploy-to', '~> 1.1.1'
   # gem 'capistrano-sidekiq'
-  gem 'capistrano-unicorn-nginx', '~> 3.2.0'
+  # gem 'capistrano-unicorn-nginx', '~> 3.2.0'
   gem 'capistrano-upload-config', '~> 0.6.0'
+  gem 'capistrano3-puma'
+  gem 'puma'
 end
 
 group :test do

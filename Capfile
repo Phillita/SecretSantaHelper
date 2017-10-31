@@ -11,13 +11,14 @@ require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano/rbenv_install'
-require 'capistrano/unicorn_nginx'
+# require 'capistrano/unicorn_nginx'
 require 'capistrano/safe_deploy_to'
 require 'capistrano/rails/console'
 # require 'capistrano/sidekiq'
 # require 'capistrano/sidekiq/monit'
 require 'capistrano/upload-config'
 # require 'whenever/capistrano'
+require 'capistrano/puma'
 
 # Include tasks from other gems included in your Gemfile
 #

@@ -23,8 +23,8 @@ server '192.168.88.150', user: 'rails', roles: %w{app db web}
 
 set :rails_env, 'production'
 set :nginx_server_name, 'apphelper.com'
-set :unicorn_workers, 20
-set :nginx_use_ssl, false
+set :puma_workers, 2
+set :puma_max_thread_count, 5
 set :unicorn_use_tcp, false
 set :branch, ENV.fetch('BRANCH', 'master')
 # set :whenever_environment, 'production'
