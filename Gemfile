@@ -33,6 +33,7 @@ gem 'devise'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
+gem 'puma'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -67,7 +68,6 @@ group :development do
   # gem 'capistrano-unicorn-nginx', '~> 3.2.0'
   gem 'capistrano-upload-config', '~> 0.6.0'
   gem 'capistrano3-puma'
-  gem 'puma'
 end
 
 group :test do
