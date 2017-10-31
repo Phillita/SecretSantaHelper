@@ -25,7 +25,7 @@ environment rails_env
 # Workers do not work on JRuby or Windows (both of which do not support
 # processes).
 #
-puma_workers ||= ENV.fetch('puma_workers') || 2
+puma_workers ||= ENV.fetch('puma_workers', 2)
 workers puma_workers
 
 # Use the `preload_app!` method when specifying a `workers` number.
