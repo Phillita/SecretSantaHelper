@@ -6,7 +6,7 @@
 # the maximum value specified for Puma. Default is set to 5 threads for minimum
 # and maximum, this matches the default thread size of Active Record.
 #
-threads puma_threads || [5, 5]
+threads 4, 16
 
 # Specifies the `port` that Puma will listen on to receive requests, default is 3000.
 #
@@ -14,7 +14,7 @@ port        ENV.fetch('PORT') { 3000 }
 
 # Specifies the `environment` that Puma will run in.
 #
-environment rails_env || 'development'
+environment ENV.fetch('RAILS_ENV') || 'development'
 
 # Specifies the number of `workers` to boot in clustered mode.
 # Workers are forked webserver processes. If using threads and workers together
@@ -22,7 +22,7 @@ environment rails_env || 'development'
 # Workers do not work on JRuby or Windows (both of which do not support
 # processes).
 #
-workers puma_workers || 2
+workers 2
 
 # Use the `preload_app!` method when specifying a `workers` number.
 # This directive tells Puma to first boot the application and load code
