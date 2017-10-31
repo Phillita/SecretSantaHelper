@@ -6,8 +6,7 @@
 # the maximum value specified for Puma. Default is set to 5 threads for minimum
 # and maximum, this matches the default thread size of Active Record.
 #
-threads_count = puma_max_thread_count || 5
-threads threads_count, threads_count
+threads puma_threads || [5, 5]
 
 # Specifies the `port` that Puma will listen on to receive requests, default is 3000.
 #
