@@ -10,7 +10,7 @@ module ApplicationHelper
 
   def page_title(text = nil)
     content_for :title do
-      "HolidayAppHelper#{': ' + text if text}"
+      "AppHelper#{': ' + text if text}"
     end
   end
 
