@@ -19,8 +19,8 @@ class SecretSanta < ApplicationRecord
 
   friendly_id :name, use: %i[slugged finders]
 
-  scope :by_email, (->(email) { joins(:user).where(User[:email].matches("%#{email}%")) unless email.blank? })
-  scope :by_name, (->(name) { where(SecretSanta[:name].matches("%#{name}%")) unless name.blank? })
+  scope :by_email, (->(email) { joins(:user).where(User[:email].matches("%#{email}%").or(User[:email].eq(email))) unless email.blank? })
+  scope :by_name, (->(name) { where(SecretSanta[:name].matches("%#{name}%").or(SecretSanta[:name].eq(name))) unless name.blank? })
 
   def autosave_associated_records_for_user
     if !user&.persisted? && User.exists?(email: user.email)
