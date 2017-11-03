@@ -1,12 +1,13 @@
 <%
   lnk ||= false
   img ||= false
+  coming_soon ||= false
 %>
-<div class="card card-lg">
-  <%= image_tag img[:name], class: 'card-img-top', alt: img[:alt], title: img[:title] if img %>
+<%= content_tag :div, class: 'card card-lg' do %>
+  <%= image_tag img[:name], class: "card-img-top#{' coming-soon' if coming_soon}", alt: img[:alt], title: img[:title] if img %>
   <div class="card-block">
     <%= content_tag :h4, title, class: 'card-title' %>
     <%= content_tag :p, description, class: 'card-text' %>
-    <%= link_to lnk[:name], lnk[:path], class: lnk.fetch(:styles, []).join(' '), id: lnk.fetch(:id, lnk[:name]).parameterize if lnk %>
+    <%= link_to lnk[:name], lnk[:path], class: lnk.fetch(:styles, []).join(' '), id: lnk.fetch(:id, lnk[:name]).parameterize, disabled: coming_soon if lnk %>
   </div>
-</div>
+<% end %>

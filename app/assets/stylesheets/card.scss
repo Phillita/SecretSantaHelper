@@ -15,6 +15,10 @@
   border: 1px solid rgba(0,0,0,.125);
   border-radius: .25rem;
 
+  .coming-soon {
+    filter: grayscale(100%);
+  }
+
   .card-img-top {
     border-top-left-radius: calc(.25rem - 1px);
     border-top-right-radius: calc(.25rem - 1px);
