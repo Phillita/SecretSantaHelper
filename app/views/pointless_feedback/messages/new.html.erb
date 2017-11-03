@@ -1,0 +1,52 @@
+<% content_for :head do %>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+<% end if PointlessFeedback.using_captcha? %>
+
+<div class="row">
+  <div class="col-lg-offset-3 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <%= render 'shared/errors', object: @message if @message.errors.any? %>
+
+    <%
+      if current_user
+        @message.name ||= current_user.name
+        @message.email_address ||= current_user.email
+      end
+    %>
+    <%= simple_form_for @message do |f| %>
+      <div class="page-header">
+        <h2>About You</h2>
+      </div>
+      <div id="feedback_name">
+        <%= f.input :name, autofocus: true, label_html: { class: 'hidden' }, placeholder: 'Name' %>
+      </div>
+      <div id="feedback_email_address">
+        <%= f.input :email_address, label_html: { class: 'hidden' }, placeholder: 'Email' %>
+      </div>
+
+      <div class="page-header">
+        <h2>Your Feedback</h2>
+      </div>
+      <div id="feedback_topic">
+        <%= f.input :topic, collection: PointlessFeedback.message_topics, label_html: { class: 'hidden' }, prompt: 'Select a Topic' %>
+      </div>
+      <div id="feedback_description">
+        <%= f.input :description, label_html: { class: 'hidden' }, placeholder: 'Leave your feedback here.' %>
+      </div>
+
+      <div class="contact-input" style="position: absolute; left: -9999px;">
+        <%= f.input :contact_info %>
+      </div>
+
+      <%= content_tag :div, '', class: 'g-recaptcha', data: { sitekey: PointlessFeedback.google_captcha_site_key } if PointlessFeedback.using_captcha? %>
+
+      <div class="row top-10">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+          <div class="btn-group" role="group" aria-label="actions">
+            <%= f.submit 'Submit', class: 'btn btn-success btn-lg' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</div>

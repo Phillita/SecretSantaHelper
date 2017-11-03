@@ -1,0 +1,7 @@
+<div class="alert alert-danger">
+  <h2><%= I18n.t('activerecord.errors.header', default: 'Invalid Fields') %></h2>
+  <p><%= I18n.t('activerecord.errors.message', default: 'Correct the following errors and try again.') %></p>
+  <% object.errors.full_messages.each do |error| %>
+    <p><%= error %></p>
+  <% end %>
+</div>

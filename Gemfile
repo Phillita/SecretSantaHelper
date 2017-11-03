@@ -48,6 +48,7 @@ gem 'liquid', '~> 4.0'
 gem 'momentjs-rails'
 gem 'simple_form'
 gem 'trix', '~> 0.11.0'
+gem 'pointless_feedback'
 
 group :development do
   gem 'guard'
