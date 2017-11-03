@@ -1,10 +1,17 @@
 <% page_title 'AppHelper - Applications' %>
 
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="page-header">
+      <h2>Christmas Applications</h2>
+    </div>
+  </div>
+</div>
 <div id="applications" class="row">
   <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
     <%= render 'shared/card',
                title: 'Secret Santa',
-               description: 'Create your own custom Secret Santa! Free!',
+               description: 'Create your own custom Secret Santa!',
                img: { name: 'secret_santa_hero.jpg', title: 'Secret Santa', alt: 'Secret Santa' },
                lnk: { id: 'secret-santa-start', name: 'Start', path: secret_santa_path, styles: %w(btn btn-primary) } %>
   </div>
@@ -18,3 +25,29 @@
                coming_soon: true %>
   </div>
 </div>
+
+<!-- <div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="page-header">
+      <h2>Applications in the works...</h2>
+    </div>
+  </div>
+</div>
+<div id="applications" class="row">
+  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+    <%#= render 'shared/card',
+               title: 'Simple Lists',
+               description: 'EzPz lists with some extra bang for your buck.',
+               img: { name: '', title: 'Simple Lists', alt: 'Simple Lists' },
+               lnk: { name: 'List it!', path: 'javascript:void(0)', styles: %w(btn btn-primary) },
+               coming_soon: true %>
+  </div>
+  <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+    <%#= render 'shared/card',
+               title: 'Name Generator',
+               description: 'Names are hard. Lets generate one instead!',
+               img: { name: '', title: 'Name Generator', alt: 'Name Generator' },
+               lnk: { name: 'Generate', path: 'javascript:void(0)', styles: %w(btn btn-primary) },
+               coming_soon: true %>
+  </div>
+</div> -->
