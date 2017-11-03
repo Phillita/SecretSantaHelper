@@ -20,4 +20,14 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  pointless_feedback:
+    messages:
+      saved: "Thanks for your feedback!"
+
+    email:
+      subject: "Pointless Feedback"
+
+  activerecord:
+    errors:
+      header: "Invalid Fields"
+      message: "Correct the following errors and try again."
