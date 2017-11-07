@@ -18,6 +18,11 @@ class SecretSanta < ApplicationRecord
   before_create :default_email_and_file
 
   friendly_id :name, use: %i[slugged finders]
+  crypt_keeper :passphrase,
+               encryptor: :mysql_aes_new,
+               key: Rails.application.secrets.passphrase_key,
+               salt: Rails.application.secrets.passphrase_salt,
+               encoding: 'UTF-8'
 
   scope :by_email, (->(email) { joins(:user).where(User[:email].matches("%#{email}%").or(User[:email].eq(email))) unless email.blank? })
   scope :by_name, (->(name) { where(SecretSanta[:name].matches("%#{name}%").or(SecretSanta[:name].eq(name))) unless name.blank? })

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171103024130) do
+ActiveRecord::Schema.define(version: 20171107011801) do
 
   create_table "friendly_id_slugs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.string "slug", null: false
@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 20171103024130) do
     t.string "email_subject"
     t.datetime "test_run"
     t.datetime "last_run_on"
-    t.string "passphrase"
+    t.text "passphrase"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "exchange_date"

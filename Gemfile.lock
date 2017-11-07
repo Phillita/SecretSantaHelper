@@ -40,9 +40,11 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
+    aes (0.5.0)
     arel (8.0.0)
     arel-helpers (2.4.0)
       activerecord (>= 3.1.0, < 6)
+    armor (0.0.3)
     autoprefixer-rails (7.1.2.6)
       execjs
     bcrypt (3.1.11)
@@ -51,6 +53,8 @@ GEM
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
     bindex (0.5.0)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -107,9 +111,15 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
+    crypt_keeper (1.1.1)
+      activerecord (>= 4.2, < 5.2)
+      activesupport (>= 4.2, < 5.2)
+      aes (~> 0.5.0)
+      armor (~> 0.0.2)
     database_cleaner (1.6.1)
     datetime_picker_rails (0.0.7)
       momentjs-rails (>= 2.8.1)
+    debug_inspector (0.0.3)
     devise (4.3.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -337,6 +347,7 @@ DEPENDENCIES
   arel-helpers (~> 2.3)
   bcrypt (~> 3.1.7)
   better_errors (~> 2.3)
+  binding_of_caller
   bootstrap-sass (~> 3.3, >= 3.3.7)
   byebug
   cancancan (~> 2.0)
@@ -354,6 +365,7 @@ DEPENDENCIES
   capybara-webkit
   cocoon (~> 1.2, >= 1.2.10)
   coffee-rails (~> 4.2, >= 4.2.2)
+  crypt_keeper
   database_cleaner (~> 1.6, >= 1.6.1)
   datetime_picker_rails (~> 0.0.7)
   devise

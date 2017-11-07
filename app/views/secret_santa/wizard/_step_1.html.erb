@@ -58,7 +58,7 @@
         </div>
         <div class="panel-body">
           <div id="secret_santa_security">
-            <%= f.input :passphrase, label_html: { class: 'hidden' }, placeholder: 'Passphrase' %>
+            <%= f.input :passphrase, as: :password, label_html: { class: 'hidden' }, placeholder: 'Passphrase', input_html: { value: f.object.passphrase } %>
           </div>
         </div>
         <div class="panel-footer">

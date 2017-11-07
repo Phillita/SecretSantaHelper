@@ -35,20 +35,18 @@ gem 'devise'
 # gem 'unicorn'
 gem 'puma'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 gem 'arel-helpers', '~> 2.3'
 gem 'cancancan', '~> 2.0'
 gem 'cocoon', '~> 1.2', '>= 1.2.10'
+gem 'crypt_keeper'
 gem 'datetime_picker_rails', '~> 0.0.7'
 gem 'friendly_id', '~> 5.2'
 gem 'jquery-turbolinks', '~> 2.1'
 gem 'liquid', '~> 4.0'
 gem 'momentjs-rails'
+gem 'pointless_feedback'
 gem 'simple_form'
 gem 'trix', '~> 0.11.0'
-gem 'pointless_feedback'
 
 group :development do
   gem 'guard'
@@ -56,6 +54,7 @@ group :development do
   gem 'guard-spring'
   gem 'letter_opener'
   # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'binding_of_caller'
   gem 'web-console', '~> 3.5', '>= 3.5.1'
 
   gem 'capistrano', '~> 3.4.0'
