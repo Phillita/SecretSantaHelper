@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col-lg-12 text-center">
     <div class="btn-group" role="group" aria-label="actions">
-      <%= f.submit 'Finish', class: 'btn btn-success btn-lg' if max_step == step %>
-      <%= f.submit 'Next', class: 'btn btn-success btn-lg' unless max_step == step %>
       <%= f.submit 'Back', class: 'btn btn-default left btn-lg' unless step == 1 %>
+      <%= f.submit 'Next', class: 'btn btn-success btn-lg next' unless max_step == step %>
+      <%= f.submit 'Finish', class: 'btn btn-success btn-lg next' if max_step == step %>
     </div>
   </div>
 </div>
