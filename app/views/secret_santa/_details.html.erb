@@ -51,16 +51,12 @@
         </div>
       <% end if secret_santa.test? %>
 
-      <%= form_for secret_santa, url: match_secret_santum_path do |f| %>
-        <div class="<%= secret_santa.test? ? 'col-lg-offset-2' : 'col-lg-offset-6' %> col-lg-2 top-15">
-          <div class="btn-group">
-            <label class="btn btn-primary btn-lg">
-              <%= f.check_box :test_run, {}, secret_santa.test_run || Time.zone.now, '' %> Test
-            </label>
-            <%= f.submit 'Make Magic!', class: 'btn btn-success btn-lg', disabled: !secret_santa.ready?, data: { turbolinks: 'false' } %>
-          </div>
+      <div class="<%= secret_santa.test? ? 'col-lg-offset-2' : 'col-lg-offset-6' %> col-lg-2 top-15">
+        <div class="btn-group">
+          <%= link_to 'Run Test', match_secret_santum_path(secret_santa, test: Time.now), class: 'btn btn-primary btn-lg', data: { turbolinks: 'false' } %>
+          <%= link_to 'Make Magic!', match_secret_santum_path(secret_santa), class: 'btn btn-success btn-lg', disabled: !secret_santa.ready?, data: { turbolinks: 'false' } %>
         </div>
-      <% end %>
+      </div>
     <% end %>
   </div>
 </div>
