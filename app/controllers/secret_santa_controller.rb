@@ -1,7 +1,7 @@
 # frozen_string_literal: false
 
 class SecretSantaController < ApplicationController
-  load_and_authorize_resource :secret_santa
+  load_and_authorize_resource :secret_santa, find_by: :slug
 
   def index
     @my_secret_santas = SecretSanta.where(user: current_user) if current_user
@@ -78,8 +78,10 @@ class SecretSantaController < ApplicationController
     @secret_santa = SecretSanta.find(params[:id])
     @secret_santa.update(test_run: params[:test])
     respond_to do |format|
-      if @secret_santa.make_magic!
+      if !@secret_santa.started? && @secret_santa.make_magic!
         flash.now[:success] = 'Matching successful!'
+        format.html
+      elsif @secret_santa.started?
         format.html
       else
         flash.now[:error] =
