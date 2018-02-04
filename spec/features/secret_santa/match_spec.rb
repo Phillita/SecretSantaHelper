@@ -72,12 +72,68 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
 
       visit secret_santum_path(secret_santa)
       expect(page).to have_content("This Secret Santa was started on #{secret_santa.reload.last_run_on}")
-      
+
       click_link 'Results'
 
       expect(page).to have_content(black_widow.name, count: 1)
       expect(page).to have_content(thor.name, count: 1)
       expect(page).to have_content(captain.name, count: 1)
+    end
+
+    context 'has already run' do
+      let!(:match1) do
+        FactoryGirl.create(
+          :secret_santa_participant_match,
+          secret_santa_participant: secret_santa_participant,
+          match: secret_santa_participant2,
+          secret_santa: secret_santa
+        )
+      end
+      let!(:match2) do
+        FactoryGirl.create(
+          :secret_santa_participant_match,
+          secret_santa_participant: secret_santa_participant2,
+          match: secret_santa_participant3,
+          secret_santa: secret_santa
+        )
+      end
+      let!(:match3) do
+        FactoryGirl.create(
+          :secret_santa_participant_match,
+          secret_santa_participant: secret_santa_participant3,
+          match: secret_santa_participant,
+          secret_santa: secret_santa
+        )
+      end
+
+      before(:each) do
+        secret_santa.update(last_run_on: Time.now)
+      end
+
+      scenario 'can resend an email' do
+        expect(SecretSantaMailer)
+          .to receive(:participant).with(secret_santa_participant.id, secret_santa_participant2.name, nil).and_call_original
+        visit secret_santum_path(secret_santa)
+        click_link 'Results'
+        within(".participant-#{secret_santa_participant.id}-result-row") do
+          find(:css, 'span.glyphicon-envelope').click
+        end
+        expect(page).to have_content("Successfully resent email to #{secret_santa_participant.name}")
+      end
+
+      context 'and has passed the exchange date' do
+        before(:each) do
+          secret_santa.update(exchange_date: Time.now - 1.day)
+        end
+
+        scenario 'cannot resend an email' do
+          visit secret_santum_path(secret_santa)
+          click_link 'Results'
+          within(".participant-#{secret_santa_participant.id}-result-row") do
+            expect(page).to_not have_selector('span.glyphicon-envelope')
+          end
+        end
+      end
     end
   end
 
@@ -139,10 +195,87 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
       expect(page).to have_content("This Secret Santa was started on #{secret_santa.reload.last_run_on}")
 
       click_link 'Results'
-      
+
       expect(page).to have_content(black_widow.name, count: 1)
       expect(page).to have_content(thor.name, count: 1)
       expect(page).to have_content(captain.name, count: 1)
+    end
+
+    scenario 'sends emails to all participants matched' do
+      expect(SecretSantaMailer)
+        .to receive(:participant).with(secret_santa_participant.id, a_kind_of(String), nil).and_call_original
+      expect(SecretSantaMailer)
+        .to receive(:participant).with(secret_santa_participant2.id, a_kind_of(String), nil).and_call_original
+      expect(SecretSantaMailer)
+        .to receive(:participant).with(secret_santa_participant3.id, a_kind_of(String), nil).and_call_original
+      allow(Kernel).to receive(:sleep).with(1).and_return(true)
+      visit secret_santum_path(secret_santa)
+      expect { click_link 'Make Magic!' }.to change { secret_santa.reload.started? }.to(true)
+      expect(page).to have_content('Matching successful!')
+
+      visit secret_santum_path(secret_santa)
+      expect(page).to have_content("This Secret Santa was started on #{secret_santa.reload.last_run_on}")
+
+      click_link 'Results'
+
+      expect(page).to have_content(black_widow.name, count: 1)
+      expect(page).to have_content(thor.name, count: 1)
+      expect(page).to have_content(captain.name, count: 1)
+    end
+
+    context 'has already run' do
+      let!(:match1) do
+        FactoryGirl.create(
+          :secret_santa_participant_match,
+          secret_santa_participant: secret_santa_participant,
+          match: secret_santa_participant2,
+          secret_santa: secret_santa
+        )
+      end
+      let!(:match2) do
+        FactoryGirl.create(
+          :secret_santa_participant_match,
+          secret_santa_participant: secret_santa_participant2,
+          match: secret_santa_participant3,
+          secret_santa: secret_santa
+        )
+      end
+      let!(:match3) do
+        FactoryGirl.create(
+          :secret_santa_participant_match,
+          secret_santa_participant: secret_santa_participant3,
+          match: secret_santa_participant,
+          secret_santa: secret_santa
+        )
+      end
+
+      before(:each) do
+        secret_santa.update(last_run_on: Time.now)
+      end
+
+      scenario 'can resend an email after the matches have been run' do
+        expect(SecretSantaMailer)
+          .to receive(:participant).with(secret_santa_participant.id, secret_santa_participant2.name, nil).and_call_original
+        visit secret_santum_path(secret_santa)
+        click_link 'Results'
+        within(".participant-#{secret_santa_participant.id}-result-row") do
+          find(:css, 'span.glyphicon-envelope').click
+        end
+      end
+
+      context 'and has passed the exchange date' do
+        before(:each) do
+          secret_santa.update(exchange_date: Time.now - 1.day)
+        end
+
+        scenario 'cannot resend an email' do
+          visit secret_santum_path(secret_santa)
+          click_link 'Results'
+          within(".participant-#{secret_santa_participant.id}-result-row") do
+            expect(page).to_not have_selector('span.glyphicon-envelope')
+          end
+        end
+      end
     end
   end
 end

@@ -10,10 +10,11 @@ class SecretSantaParticipantController < ApplicationController
     @secret_santa_participant_match = @secret_santa_participant.secret_santa_participant_match
     respond_to do |format|
       if SecretSantaService.new(@secret_santa).resend_email(match: @secret_santa_participant_match)
-        format.html { redirect_to match_secret_santum_path(@secret_santa), success: "Successfully resent email to #{@secret_santa_participant.name}" }
+        flash[:success] = "Successfully resent email to #{@secret_santa_participant.name}"
       else
-        format.html { redirect_to match_secret_santum_path(@secret_santa), error: "Failed to resend email to #{@secret_santa_participant.name}. Please try again." }
+        flash[:error] = "Failed to resend email to #{@secret_santa_participant.name}. Please try again."
       end
+      format.html { redirect_to match_secret_santum_path(@secret_santa) }
     end
   end
 end
