@@ -433,7 +433,7 @@ RSpec.feature 'Creating a Secret Santa', js: true do
       expect(page).to have_selector("input[value='Captain']")
       expect(page).to have_selector("input[value='America']")
       expect(page).to have_selector("input[value='camerica@avengers.com']")
-      fill_in :secret_santa_name, with: 'Avengers First Secret Santa'
+      fill_in 'secret_santa_name', with: 'Avengers First Secret Santa'
 
       click_button 'Next'
 

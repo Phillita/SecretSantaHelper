@@ -19,7 +19,17 @@ class SecretSantaService
       finishing_touches unless @secret_santa.test?
       true
     end
-  rescue => ex
+  rescue StandardError => ex
+    Rails.logger.error ex.message + "\n" + ex.backtrace.join("\n")
+    false
+  end
+
+  def resend_email(match:)
+    print_matches([match]) if @secret_santa.send_file?
+    mail_matches([match]) if @secret_santa.send_email?
+    cleanup_files([match]) if @secret_santa.send_file?
+    true
+  rescue StandardError => ex
     Rails.logger.error ex.message + "\n" + ex.backtrace.join("\n")
     false
   end
@@ -102,7 +112,7 @@ class SecretSantaService
 
   def mail_matches(matches)
     matches.each do |match|
-      SecretSantaMailer.participant(match.secret_santa_participant_id, match.name, match[:file]).deliver_now
+      SecretSantaMailer.participant(match.secret_santa_participant_id, match.name, match.file).deliver_now
       # Sleep will be needed later in order to not flood email servers too quickly
       # sleep 1
     end

@@ -18,7 +18,7 @@
           <td><%= participant.name %></td>
           <td><%= participant.email %></td>
           <td>
-            <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-envelope'), '#', title: 'Resend Email' %> |
+            <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-envelope'), secret_santum_secret_santa_participant_resend_email_path(secret_santa, participant), title: 'Resend Email' if secret_santa.send_email? %>
             <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), '#', title: 'Edit Participant' %>
           </td>
         <% end %>

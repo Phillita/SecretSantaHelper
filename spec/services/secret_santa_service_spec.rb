@@ -127,4 +127,59 @@ RSpec.describe SecretSantaService do
       end
     end
   end
+
+  describe 'resend_email' do
+    let!(:secret_santa_participant) do
+      FactoryGirl.create(:secret_santa_participant, participantable: secret_santa)
+    end
+    let!(:secret_santa_participant_match) do
+      FactoryGirl.create(:secret_santa_participant_match, secret_santa_participant: secret_santa_participant, secret_santa: secret_santa)
+    end
+
+    subject { SecretSantaService.new(secret_santa).resend_email(match: secret_santa_participant_match) }
+
+    context 'without an email method' do
+      it 'should send an email to the participant with their match' do
+        expect(SecretSantaMailer).not_to receive(:participant)
+        subject
+      end
+    end
+
+    context 'with email turned on' do
+      let(:secret_santa) { FactoryGirl.create(:secret_santa_with_email) }
+
+      it 'should send an email to the participant with their match' do
+        expect(SecretSantaMailer).to receive(:participant).with(secret_santa_participant_match.secret_santa_participant_id, secret_santa_participant_match.name, nil).and_call_original
+        subject
+      end
+    end
+
+    context 'with file turned on' do
+      let(:secret_santa) { FactoryGirl.create(:secret_santa_with_file) }
+
+      it 'should send an email to the participant with their match' do
+        expect(SecretSantaMailer).not_to receive(:participant)
+        subject
+      end
+    end
+
+    context 'file/email delivery method on' do
+      let(:secret_santa) { FactoryGirl.create(:secret_santa_with_email_and_file) }
+      let(:liquid_options) do
+        {
+          'Giver' => secret_santa_participant_match.giver_name,
+          'Receiver' => secret_santa_participant_match.name,
+          'SecretSanta' => secret_santa.name
+        }
+      end
+      let(:filename_template) { Liquid::Template.parse(secret_santa.filename) }
+      let(:filename_rendered_template) { filename_template.render(liquid_options) }
+      let(:filepath) { Rails.root.join('tmp', 'secret_santa', "#{filename_rendered_template}.txt").to_s }
+
+      it 'should send an email to the participant with their match' do
+        expect(SecretSantaMailer).to receive(:participant).with(secret_santa_participant_match.secret_santa_participant_id, secret_santa_participant_match.name, filepath).and_call_original
+        subject
+      end
+    end
+  end
 end

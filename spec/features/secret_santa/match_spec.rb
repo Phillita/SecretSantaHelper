@@ -26,11 +26,10 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
     context 'with the test flag on' do
       before(:each) do
         visit secret_santum_path(secret_santa)
-        check 'secret_santa_test_run'
       end
 
       scenario 'shows how it would randomly match up users' do
-        click_button 'Make Magic!'
+        click_link 'Run Test'
 
         expect(page).to have_content('Matching successful!')
 
@@ -52,7 +51,7 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
           exception: secret_santa_participant,
           secret_santa_participant: secret_santa_participant3
         )
-        click_button 'Make Magic!'
+        click_link 'Run Test'
         expect(page).to have_content(
           "Failed to match all participants. It's possible that not all participants can be matched. Please try again."
         )
@@ -68,11 +67,17 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
         .to receive(:participant).with(secret_santa_participant3.id, a_kind_of(String), nil).and_call_original
       allow(Kernel).to receive(:sleep).with(1).and_return(true)
       visit secret_santum_path(secret_santa)
-      expect { click_button 'Make Magic!' }.to change { secret_santa.reload.started? }.to(true)
+      expect { click_link 'Make Magic!' }.to change { secret_santa.reload.started? }.to(true)
       expect(page).to have_content('Matching successful!')
 
       visit secret_santum_path(secret_santa)
       expect(page).to have_content("This Secret Santa was started on #{secret_santa.reload.last_run_on}")
+      
+      click_link 'Results'
+
+      expect(page).to have_content(black_widow.name, count: 1)
+      expect(page).to have_content(thor.name, count: 1)
+      expect(page).to have_content(captain.name, count: 1)
     end
   end
 
@@ -86,11 +91,10 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
     context 'with the test flag on' do
       before(:each) do
         visit secret_santum_path(secret_santa)
-        check 'secret_santa_test_run'
       end
 
       scenario 'shows how it would randomly match up users' do
-        click_button 'Make Magic!'
+        click_link 'Run Test'
 
         expect(page).to have_content('Matching successful!')
 
@@ -112,7 +116,7 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
           exception: secret_santa_participant,
           secret_santa_participant: secret_santa_participant3
         )
-        click_button 'Make Magic!'
+        click_link 'Run Test'
         expect(page).to have_content(
           "Failed to match all participants. It's possible that not all participants can be matched. Please try again."
         )
@@ -128,11 +132,17 @@ RSpec.feature 'Matching users in the Secret Santa', js: true do
         .to receive(:participant).with(secret_santa_participant3.id, a_kind_of(String), nil).and_call_original
       allow(Kernel).to receive(:sleep).with(1).and_return(true)
       visit secret_santum_path(secret_santa)
-      expect { click_button 'Make Magic!' }.to change { secret_santa.reload.started? }.to(true)
+      expect { click_link 'Make Magic!' }.to change { secret_santa.reload.started? }.to(true)
       expect(page).to have_content('Matching successful!')
 
       visit secret_santum_path(secret_santa)
       expect(page).to have_content("This Secret Santa was started on #{secret_santa.reload.last_run_on}")
+
+      click_link 'Results'
+      
+      expect(page).to have_content(black_widow.name, count: 1)
+      expect(page).to have_content(thor.name, count: 1)
+      expect(page).to have_content(captain.name, count: 1)
     end
   end
 end

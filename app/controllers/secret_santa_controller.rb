@@ -16,6 +16,7 @@ class SecretSantaController < ApplicationController
   end
 
   def create
+    # byebug
     @secret_santa = SecretSanta.create(secret_santa_params)
     unlock_secret_santa(@secret_santa) unless current_user
     wizard(@secret_santa)

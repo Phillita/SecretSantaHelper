@@ -1,0 +1,1 @@
+BetterErrors.editor = 'vscode://open?url=file://%{file}&line=%{line}' if defined? BetterErrors && ENV['EDITOR'].include?('code')

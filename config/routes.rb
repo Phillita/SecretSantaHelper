@@ -12,6 +12,10 @@ Rails.application.routes.draw do
       get 'access'
       get 'clone'
     end
+    
+    resources :secret_santa_participant, only: [] do
+      get 'resend_email'
+    end
   end
 
   mount PointlessFeedback::Engine, at: '/feedback'
