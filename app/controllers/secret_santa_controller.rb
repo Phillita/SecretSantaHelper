@@ -16,7 +16,6 @@ class SecretSantaController < ApplicationController
   end
 
   def create
-    # byebug
     @secret_santa = SecretSanta.create(secret_santa_params)
     unlock_secret_santa(@secret_santa) unless current_user
     wizard(@secret_santa)
@@ -163,6 +162,7 @@ class SecretSantaController < ApplicationController
       secret_santa.user = current_user if current_user
       secret_santa.build_user(guest: Time.zone.now) unless secret_santa.user
     when 2
+      @active_secret_santa_participant = params[:secret_santa_participant_id]
       secret_santa.secret_santa_participants.where(user_id: secret_santa.user_id).first_or_initialize
     when 3
       secret_santa.secret_santa_participants.each do |participant|

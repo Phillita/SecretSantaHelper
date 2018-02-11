@@ -19,7 +19,7 @@
             <%= content_tag :td, participant.email %>
             <%= content_tag :td do %>
               <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-envelope'), secret_santum_secret_santa_participant_resend_email_path(secret_santa, participant), title: 'Resend Email' if secret_santa.send_email? %>
-              <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), '#', title: 'Edit Participant' %>
+              <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), edit_secret_santum_path(secret_santa, step: 1, secret_santa_participant_id: participant.id), title: 'Edit Participant' %>
             <% end unless secret_santa.completed? %>
           <% end %>
         <% end %>
