@@ -1,0 +1,30 @@
+<%= render 'errors', object: @secret_santa_participant if @secret_santa_participant.errors.any? && !back %>
+
+<%= simple_form_for [@secret_santa, @secret_santa_participant], html: { class: 'wizard' } do |f| %>
+  <div class="page-header">
+    <h1>Welcome</h1>
+    <p>You've been invited to join something amazing!</p>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <p><%= @secret_santa.user.name %> has created a Secret Santa and would like you to join! All you need to do is enter your name and email below.</p>
+
+      <h3>Sign Up!</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div id="secret_santa_participants">
+      <%= render 'secret_santa_participants/secret_santa_participant_fields', f: f, classes: 'col-lg-6 col-md-6 col-sm-12 col-xs-12', removable: false %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="btn-group" role="group" aria-label="actions">
+        <%= f.submit 'Join', class: 'btn btn-success btn-lg next' %>
+      </div>
+    </div>
+  </div>
+<% end %>

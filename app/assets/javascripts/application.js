@@ -19,4 +19,5 @@
 //= require trix
 //= require moment
 //= require datetime_picker
+//= require clipboard
 //= require_tree .

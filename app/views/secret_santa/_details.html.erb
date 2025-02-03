@@ -11,7 +11,10 @@
     <div class="col-lg-4">
       <div class="secret-santa-name">
         <%= content_tag :h1 do %>
-        <%= secret_santa.name %> <small><%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), edit_secret_santum_path(secret_santa), id: 'edit-secret-santa' unless secret_santa.started? %> <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-trash'), secret_santum_path(secret_santa), method: :delete unless secret_santa.started? %></small>
+        <%= secret_santa.name %> <small>
+        <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-pencil'), edit_secret_santum_path(secret_santa), id: 'edit-secret-santa', title: 'Edit', data: { toggle: 'tooltip', placement: 'top', title: 'Edit' } unless secret_santa.started? %>
+        <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-share-alt'), 'javascript:void(0)', title: 'Share', class: 'clipboard-btn', data: { toggle: 'tooltip', placement: 'top', title: 'Share', clipboard_action: 'copy', clipboard_text: share_secret_santum_secret_santa_participants_url(secret_santa) } unless secret_santa.completed? %>
+        <%= link_to content_tag(:span, '', class: 'glyphicon glyphicon-trash'), secret_santum_path(secret_santa), title: 'Delete', data: { toggle: 'tooltip', placement: 'top', title: 'Delete' }, method: :delete unless secret_santa.started? %></small>
         <% end %>
       </div>
     </div>
@@ -22,7 +25,7 @@
           <%= content_tag :p do %>
             This Secret Santa was
             <% if secret_santa.completed? %>
-               completed on <%= content_tag :strong, secret_santa.exchange_date %>.
+              completed on <%= content_tag :strong, secret_santa.exchange_date %>.
             <% else %>
               started on <%= content_tag :strong, secret_santa.last_run_on %>.
             <% end %>

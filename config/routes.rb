@@ -12,9 +12,13 @@ Rails.application.routes.draw do
       get 'access'
       get 'clone'
     end
-    
-    resources :secret_santa_participant, only: [] do
+
+    resources :secret_santa_participants, path: 'secret-santa-participant' do
       get 'resend_email'
+
+      collection do
+        get 'share', action: :new
+      end
     end
   end
 

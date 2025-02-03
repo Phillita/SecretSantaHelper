@@ -47,6 +47,7 @@ gem 'momentjs-rails'
 gem 'pointless_feedback'
 gem 'simple_form'
 gem 'trix', '~> 0.11.0'
+gem 'clipboard-rails'
 
 group :development do
   gem 'guard'
